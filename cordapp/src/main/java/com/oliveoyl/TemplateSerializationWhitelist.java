@@ -1,4 +1,4 @@
-package com.template;
+package com.oliveoyl;
 
 import net.corda.core.serialization.SerializationWhitelist;
 import org.jetbrains.annotations.NotNull;

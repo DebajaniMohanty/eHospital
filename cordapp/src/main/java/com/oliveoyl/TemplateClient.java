@@ -1,4 +1,4 @@
-package com.template;
+package com.oliveoyl;
 
 import net.corda.client.rpc.CordaRPCClient;
 import net.corda.client.rpc.CordaRPCClientConfiguration;

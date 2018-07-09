@@ -1,4 +1,4 @@
-package com.template;
+package com.oliveoyl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
@@ -23,14 +23,14 @@ public class TemplateWebPlugin implements WebServerPluginRegistry {
 
     /**
      * A list of directories in the resources directory that will be served by Jetty under /web.
-     * The template's web frontend is accessible at /web/template.
+     * The oliveoyl's web frontend is accessible at /web/oliveoyl.
      */
     @NotNull
     @Override
     public Map<String, String> getStaticServeDirs() {
         return ImmutableMap.of(
-                // This will serve the templateWeb directory in resources to /web/template
-                "template", getClass().getClassLoader().getResource("templateWeb").toExternalForm());
+                // This will serve the templateWeb directory in resources to /web/oliveoyl
+                "oliveoyl", getClass().getClassLoader().getResource("templateWeb").toExternalForm());
     }
 
     @Override

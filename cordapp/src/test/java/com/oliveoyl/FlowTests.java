@@ -1,4 +1,4 @@
-package com.template;
+package com.oliveoyl;
 
 import com.google.common.collect.ImmutableList;
 import net.corda.testing.node.MockNetwork;
@@ -16,7 +16,7 @@ public class FlowTests {
 
     @Before
     public void setup() {
-        network = new MockNetwork(ImmutableList.of("com.template"));
+        network = new MockNetwork(ImmutableList.of("com.oliveoyl"));
         a = network.createNode();
         b = network.createNode();
         a.registerInitiatedFlow(TemplateFlow.Responder.class);
