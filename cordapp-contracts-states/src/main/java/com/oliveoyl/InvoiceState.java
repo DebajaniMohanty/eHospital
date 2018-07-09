@@ -28,6 +28,14 @@ public class InvoiceState implements LinearState {
         this.paid = paid;
     }
 
+    public Party getFrom() {
+        return from;
+    }
+
+    public Party getTo() {
+        return to;
+    }
+
     public int getValue() {
         return value;
     }
@@ -40,15 +48,15 @@ public class InvoiceState implements LinearState {
         return items;
     }
 
+    public int getPaid() {
+        return paid;
+    }
+
     public List<AbstractParty> getParticipants() {
         return ImmutableList.of(from, to);
     }
 
     public UniqueIdentifier getLinearId() {
         return linearId;
-    }
-
-    public int getPaid() {
-        return paid;
     }
 }
