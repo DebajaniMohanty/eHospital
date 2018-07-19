@@ -4,8 +4,6 @@ CryptoFishies is a CorDapp for managing fishing rights.
 
 ## Architecture
 
-### States
-
 It has a single state, `CryptoFish`:
 
     -------------------
@@ -53,11 +51,29 @@ fished in the given location.
     |                                                                                   |
     -------------------------------------------------------------------------------------
 
-By requiring that a `CryptoFish` state of the correct type and location is transferred whenever a fish is sold, we prevent 
+By requiring that a `CryptoFish` state of the correct type and location be transferred whenever a fish is sold, we prevent 
 overfishing:
 
-TODO
+    -------------------------------------------------------------------------------------
+    |                                                                                   |
+    |    -------------------                                     -------------------    |
+    |    |                 |                       ▲             |                 |    |
+    |    |   CryptoFish    |                       | -►          |   CryptoFish    |    |
+    |    |                 |    -------------------     -►       |                 |    |
+    |    |    isFished     |    |  TransferFished command  -►    |    isFished     |    |
+    |    |    == true      |    |     signed by owner      -►    |    == true      |    |
+    |    |                 |    -------------------     -►       |                 |    |
+    |    |                 |                       | -►          |                 |    |
+    |    -------------------                       ▼             -------------------    |
+    |                                                                                   |
+    -------------------------------------------------------------------------------------
 
-### Flows
+This requires three flows:
 
-TODO
+* IssueCryptoFishyFlow
+* FishCryptoFishyFlow
+* TradeFishedCryptoFishyFlow
+
+## Extensions for V2
+
+* Allow fishing rights (i.e. `CryptoFish` states where `isFished == false`) to be bought and sold
