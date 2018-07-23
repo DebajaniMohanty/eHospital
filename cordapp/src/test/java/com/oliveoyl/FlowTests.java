@@ -19,8 +19,6 @@ public class FlowTests {
         network = new MockNetwork(ImmutableList.of("com.oliveoyl"));
         a = network.createNode();
         b = network.createNode();
-        a.registerInitiatedFlow(CreateInvoiceFlowResponder.class);
-        b.registerInitiatedFlow(CreateInvoiceFlowResponder.class);
         network.runNetwork();
     }
 
