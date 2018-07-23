@@ -1,19 +1,21 @@
 package com.oliveoyl;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import net.corda.core.contracts.ContractState;
+import net.corda.core.contracts.LinearState;
+import net.corda.core.contracts.UniqueIdentifier;
 import net.corda.core.identity.AbstractParty;
 import net.corda.core.identity.Party;
+import net.corda.core.serialization.ConstructorForDeserialization;
 
 import java.util.List;
 
-public class CryptoFishy implements ContractState {
+public class CryptoFishy implements LinearState {
     private final int year;
     private final Party owner;
     private final String type;
     private final String location;
     private final boolean isFished;
+    private final UniqueIdentifier linearId;
 
     public CryptoFishy(int year, Party owner, String type, String location, boolean isFished) {
         this.year = year;
@@ -21,6 +23,17 @@ public class CryptoFishy implements ContractState {
         this.type = type;
         this.location = location;
         this.isFished = isFished;
+        this.linearId = new UniqueIdentifier();
+    }
+
+    @ConstructorForDeserialization
+    public CryptoFishy(int year, Party owner, String type, String location, boolean isFished, UniqueIdentifier linearId) {
+        this.year = year;
+        this.owner = owner;
+        this.type = type;
+        this.location = location;
+        this.isFished = isFished;
+        this.linearId = linearId;
     }
 
     public List<AbstractParty> getParticipants() {
@@ -32,7 +45,7 @@ public class CryptoFishy implements ContractState {
     }
 
     public CryptoFishy fish() {
-        return new CryptoFishy(year, owner, type, location, true);
+        return new CryptoFishy(year, owner, type, location, true, linearId);
     }
 
     public CryptoFishy throwBackIntoTheSea() {
@@ -57,5 +70,9 @@ public class CryptoFishy implements ContractState {
 
     public int getYear() {
         return year;
+    }
+
+    public UniqueIdentifier getLinearId() {
+        return linearId;
     }
 }

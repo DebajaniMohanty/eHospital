@@ -1,5 +1,6 @@
 package com.oliveoyl;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.corda.core.contracts.Command;
 import net.corda.core.flows.FinalityFlow;
 import net.corda.core.flows.FlowException;
@@ -21,7 +22,7 @@ public class IssueCryptoFishyFlow extends FlowLogic<SignedTransaction> {
         this.type = type;
         this.location = location;
     }
-
+    @Suspendable
     public SignedTransaction call() throws FlowException {
         Party notary = getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0);
         Party regulatoryBody = getOurIdentity();

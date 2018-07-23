@@ -1,3 +1,5 @@
 .gradle/
 .idea/
 olive-oyl.iml
+cordapp/build/
+cordapp/out/
