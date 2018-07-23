@@ -35,6 +35,10 @@ public class CryptoFishy implements ContractState {
         return new CryptoFishy(year, owner, type, location, true);
     }
 
+    public CryptoFishy throwBackIntoTheSea() {
+        return new CryptoFishy(year, owner, type, location, false);
+    }
+
     public Party getOwner() {
         return owner;
     }
