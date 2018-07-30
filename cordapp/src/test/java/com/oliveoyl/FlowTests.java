@@ -2,7 +2,6 @@ package com.oliveoyl;
 
 import com.google.common.collect.ImmutableList;
 import net.corda.core.concurrent.CordaFuture;
-import net.corda.core.contracts.UniqueIdentifier;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.testing.node.MockNetwork;
 import net.corda.testing.node.StartedMockNode;

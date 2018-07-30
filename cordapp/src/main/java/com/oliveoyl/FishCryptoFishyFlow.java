@@ -1,23 +1,15 @@
 package com.oliveoyl;
 
 import com.google.common.collect.ImmutableList;
-import com.oliveoyl.CryptoFishyCommands.Issue;
-import kotlinx.html.Q;
 import net.corda.core.contracts.Command;
 import net.corda.core.contracts.StateAndRef;
 import net.corda.core.contracts.UniqueIdentifier;
 import net.corda.core.flows.FinalityFlow;
 import net.corda.core.flows.FlowException;
 import net.corda.core.flows.FlowLogic;
-import net.corda.core.identity.Party;
 import net.corda.core.node.services.vault.QueryCriteria;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.TransactionBuilder;
-import org.eclipse.jetty.util.security.Credential;
-import org.hibernate.Transaction;
-
-import java.time.Instant;
-import java.util.Date;
 
 public class FishCryptoFishyFlow extends FlowLogic<SignedTransaction> {
     private final UniqueIdentifier linearId;

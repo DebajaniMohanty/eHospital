@@ -7,6 +7,7 @@ import net.corda.core.identity.AbstractParty;
 import net.corda.core.identity.Party;
 import net.corda.core.serialization.ConstructorForDeserialization;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class CryptoFishy implements LinearState {
@@ -36,6 +37,7 @@ public class CryptoFishy implements LinearState {
         this.linearId = linearId;
     }
 
+    @NotNull
     public List<AbstractParty> getParticipants() {
         return ImmutableList.of(owner);
     }
@@ -68,6 +70,7 @@ public class CryptoFishy implements LinearState {
         return year;
     }
 
+    @NotNull
     public UniqueIdentifier getLinearId() {
         return linearId;
     }
