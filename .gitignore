@@ -8,3 +8,4 @@ cordapp-contracts-states/out/
 .DS_Store
 */.DS_Store
 */*/.DS_Store
+build/

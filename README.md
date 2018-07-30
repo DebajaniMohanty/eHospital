@@ -2,6 +2,15 @@
 
 CryptoFishies is a CorDapp for managing fishing rights.
 
+## Running the nodes
+
+Run the `NodeDriver` run configuration from IntelliJ. This starts four nodes:
+
+* `Regulatory Body`: http://localhost:10007
+* `Fisherman 1`: http://localhost:10011
+* `Fisherman 2`: http://localhost:10015
+* `Buyer`: http://localhost:10019
+
 ## Architecture
 
 It has a single state, `CryptoFish`:
@@ -73,7 +82,3 @@ This requires three flows:
 * IssueCryptoFishyFlow
 * FishCryptoFishyFlow
 * TransferCryptoFishyFlow
-
-## Extensions for V2
-
-* Allow fishing rights (i.e. `CryptoFish` states where `isFished == false`) to be bought and sold
