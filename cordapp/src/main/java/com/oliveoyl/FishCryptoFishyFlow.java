@@ -30,15 +30,11 @@ public class FishCryptoFishyFlow extends FlowLogic<SignedTransaction> {
         QueryCriteria queryCriteria = new QueryCriteria.LinearStateQueryCriteria(null, ImmutableList.of(linearId.getId()));
         StateAndRef<CryptoFishy> inputStateAndRef = getServiceHub().getVaultService().queryBy(CryptoFishy.class, queryCriteria).getStates().get(0);
 
-        Party ourIdentity = getOurIdentity();
-
-        // get input to create output
         CryptoFishy inputFishy = inputStateAndRef.getState().getData();
         CryptoFishy outputFishy = inputFishy.fish();
-        // get Fish Command
-        Command<CryptoFishyCommands.Fish> fishCommand = new Command<>(new CryptoFishyCommands.Fish(), ourIdentity.getOwningKey());
 
-        // Build Transaction with Input State and Ref, Output State and Command
+        Command<CryptoFishyCommands.Fish> fishCommand = new Command<>(new CryptoFishyCommands.Fish(), getOurIdentity().getOwningKey());
+
         TransactionBuilder builder = new TransactionBuilder(inputStateAndRef.getState().getNotary())
                 .addInputState(inputStateAndRef)
                 .addOutputState(outputFishy, "com.oliveoyl.CryptoFishyContract")
