@@ -6,10 +6,10 @@ CryptoFishies is a CorDapp for managing fishing rights.
 
 Run the `NodeDriver` run configuration from IntelliJ. This starts four nodes:
 
-* `Regulatory Body`: http://localhost:10007
-* `Fisherman 1`: http://localhost:10011
-* `Fisherman 2`: http://localhost:10015
-* `Buyer`: http://localhost:10019
+* `Regulatory Body`: http://localhost:10007/web/regulatoryBody
+* `Fisherman 1`: http://localhost:10011/web/fisherman1
+* `Fisherman 2`: http://localhost:10015/web/fisherman2
+* `Buyer`: http://localhost:10019/web/buyer
 
 ## Architecture
 
