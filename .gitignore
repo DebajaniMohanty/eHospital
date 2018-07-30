@@ -5,3 +5,6 @@ cordapp/build/
 out/
 cordapp/out/
 cordapp-contracts-states/out/
+.DS_Store
+*/.DS_Store
+*/*/.DS_Store
