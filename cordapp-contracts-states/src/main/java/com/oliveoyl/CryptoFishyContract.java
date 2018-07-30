@@ -22,7 +22,7 @@ public class CryptoFishyContract implements Contract {
         CryptoFishyCommands commandType = command.getValue();
 
         if (commandType instanceof CryptoFishyCommands.Issue) verifyIssue(tx, command);
-        else if (commandType instanceof CryptoFishyCommands.Fish) verifyFishCommand(tx, command);
+        else if (commandType instanceof CryptoFishyCommands.Fish) verifyFish(tx, command);
         else if (commandType instanceof CryptoFishyCommands.Transfer) verifyTransfer(tx, command);
     }
 
@@ -35,18 +35,18 @@ public class CryptoFishyContract implements Contract {
             final CryptoFishy out = tx.outputsOfType(CryptoFishy.class).get(0);
             require.using("Only the owner property may change in a CryptoFishyTransfer transaction.", in.equals(out.transfer(in.getOwner())));
             require.using("The owner property must change in a CryptoFishyTransfer transaction.", !(in.getOwner().equals(out.getOwner())));
-            require.using("There must only be two signers (the current owner and new owner) in a CryptoFishyTransfer transaction.", command.getSigners().size() == 2);
+            require.using("There must only be one signers (the current owner) in a CryptoFishyTransfer transaction.", command.getSigners().size() == 1);
             final Party currentOwner = in.getOwner();
             final Party newOwner = out.getOwner();
             require.using("The current owner and new owner must be signers in a CryptoFishyTransfer transaction.",
-                    command.getSigners().containsAll(ImmutableList.of(currentOwner.getOwningKey(), newOwner.getOwningKey())));
+                    command.getSigners().containsAll(ImmutableList.of(currentOwner.getOwningKey())));
             require.using("The new owner must not be null in a CryptoFishyTransfer transaction.", out.getOwner() != null);
 
             return null;
         });
     }
 
-    private void verifyFishCommand(LedgerTransaction tx, CommandWithParties command) throws IllegalArgumentException  {
+    private void verifyFish(LedgerTransaction tx, CommandWithParties command) throws IllegalArgumentException  {
         requireThat(require -> {
             // Generic constraints over Transaction Transfering a Fish right.
             require.using("A Fishing right Fish transaction should only consume one input state.", tx.getInputs().size() == 1);

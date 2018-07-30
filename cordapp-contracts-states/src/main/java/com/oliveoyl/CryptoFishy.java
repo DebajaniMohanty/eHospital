@@ -9,6 +9,7 @@ import net.corda.core.serialization.ConstructorForDeserialization;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
 
 public class CryptoFishy implements LinearState {
     private final int year;
@@ -80,5 +81,25 @@ public class CryptoFishy implements LinearState {
     @NotNull
     public UniqueIdentifier getLinearId() {
         return linearId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CryptoFishy that = (CryptoFishy) o;
+        return year == that.year &&
+                isFished == that.isFished &&
+                Objects.equals(owner, that.owner) &&
+                Objects.equals(type, that.type) &&
+                Objects.equals(location, that.location) &&
+                Objects.equals(regulatoryBody, that.regulatoryBody) &&
+                Objects.equals(linearId, that.linearId);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(year, owner, type, location, isFished, regulatoryBody, linearId);
     }
 }
