@@ -2,10 +2,8 @@ package com.oliveoyl;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.ImmutableList;
-import net.corda.core.contracts.Command;
 import net.corda.core.contracts.StateAndRef;
 import net.corda.core.contracts.UniqueIdentifier;
-import net.corda.core.flows.FinalityFlow;
 import net.corda.core.flows.FlowException;
 import net.corda.core.flows.FlowLogic;
 import net.corda.core.identity.Party;
@@ -27,20 +25,13 @@ public class TransferCryptoFishyFlow extends FlowLogic<SignedTransaction> {
         QueryCriteria queryCriteria = new QueryCriteria.LinearStateQueryCriteria(null, ImmutableList.of(linearId.getId()));
         StateAndRef<CryptoFishy> inputStateAndRef = getServiceHub().getVaultService().queryBy(CryptoFishy.class, queryCriteria).getStates().get(0);
 
-        CryptoFishy inputFishy = inputStateAndRef.getState().getData();
-        CryptoFishy outputFishy = inputFishy.transfer(newOwner);
-
-        Command<CryptoFishyCommands.Transfer> transferCommand = new Command<>(new CryptoFishyCommands.Transfer(), getOurIdentity().getOwningKey());
+        CryptoFishy outputFishy = inputStateAndRef.getState().getData().transfer(newOwner);
 
         TransactionBuilder builder = new TransactionBuilder(inputStateAndRef.getState().getNotary())
                 .addInputState(inputStateAndRef)
-                .addOutputState(outputFishy, "com.oliveoyl.CryptoFishyContract")
-                .addCommand(transferCommand);
+                .addOutputState(outputFishy, CryptoFishyContract.ID)
+                .addCommand(new CryptoFishyCommands.Transfer(), getOurIdentity().getOwningKey());
 
-        builder.verify(getServiceHub());
-
-        SignedTransaction signedTransaction = getServiceHub().signInitialTransaction(builder);
-
-        return subFlow(new FinalityFlow(signedTransaction));
+        return subFlow(new VerifySignAndFinaliseFlow(builder));
     }
 }

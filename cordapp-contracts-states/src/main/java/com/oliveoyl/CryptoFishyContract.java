@@ -13,6 +13,8 @@ import static net.corda.core.contracts.ContractsDSL.requireSingleCommand;
 import static net.corda.core.contracts.ContractsDSL.requireThat;
 
 public class CryptoFishyContract implements Contract {
+    public static final String ID = "com.oliveoyl.CryptoFishyContract";
+
     public void verify(LedgerTransaction tx) throws IllegalArgumentException {
         isFishy(tx);
     }

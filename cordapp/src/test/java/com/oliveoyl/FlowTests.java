@@ -14,18 +14,28 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.time.Instant;
+import java.util.Date;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 public class FlowTests {
     private MockNetwork network;
     private StartedMockNode a;
     private StartedMockNode b;
+    private Party partyA;
+    private Party partyB;
+    private String TYPE = "albacore";
+    private String LOCATION = "manilla";
 
     @Before
     public void setup() {
         network = new MockNetwork(ImmutableList.of("com.oliveoyl"));
         a = network.createNode();
         b = network.createNode();
+        partyA = a.getInfo().getLegalIdentities().get(0);
+        partyB = b.getInfo().getLegalIdentities().get(0);
         network.runNetwork();
     }
 
@@ -39,57 +49,92 @@ public class FlowTests {
 
     @Test
     public void issue() throws Exception {
-        SignedTransaction tx = issue("albacore", "manilla");
+        LedgerTransaction tx = issue(a, TYPE, LOCATION);
 
         assertEquals(0, tx.getInputs().size());
-        assertEquals(1, tx.getTx().getOutputs().size());
-        // TODO: More assertions.
+        assertEquals(1, tx.getOutputs().size());
+
+        List<CryptoFishy> fishies = tx.outputsOfType(CryptoFishy.class);
+        assertEquals(1, fishies.size());
+
+        CryptoFishy fishy = fishies.get(0);
+        CryptoFishy expectedFishy = new CryptoFishy(
+                Date.from(Instant.now()).getYear(),
+                partyA, TYPE, LOCATION, false, partyA,
+                fishy.getLinearId());
+        assertEquals(expectedFishy, fishy);
     }
 
     @Test
     public void fish() throws Exception {
-        SignedTransaction issueTx = issue("albacore", "manilla");
-        LedgerTransaction issueLedgerTx = issueTx.toLedgerTransaction(a.getServices());
-        UniqueIdentifier linearId = issueLedgerTx.outputsOfType(CryptoFishy.class).get(0).getLinearId();
-        SignedTransaction fishTx = fish(linearId);
+        LedgerTransaction issueTx = issue(a, TYPE, LOCATION);
+        UniqueIdentifier linearId = issueTx.outputsOfType(CryptoFishy.class).get(0).getLinearId();
+        LedgerTransaction fishTx = fish(a, linearId);
 
         assertEquals(1, fishTx.getInputs().size());
-        assertEquals(1, fishTx.getTx().getOutputs().size());
-        // TODO: More assertions.
+        assertEquals(1, fishTx.getOutputs().size());
+
+        List<CryptoFishy> inputFishies = fishTx.inputsOfType(CryptoFishy.class);
+        assertEquals(1, inputFishies.size());
+        List<CryptoFishy> outputFishies = fishTx.outputsOfType(CryptoFishy.class);
+        assertEquals(1, outputFishies.size());
+
+        CryptoFishy inputFishy = inputFishies.get(0);
+        CryptoFishy outputFishy = outputFishies.get(0);
+        CryptoFishy expectedInputFishy = new CryptoFishy(
+                Date.from(Instant.now()).getYear(),
+                partyA, TYPE, LOCATION, false, partyA,
+                inputFishy.getLinearId());
+        assertEquals(expectedInputFishy, inputFishy);
+        assertEquals(expectedInputFishy.fish(), outputFishy);
     }
 
     @Test
     public void transfer() throws Exception {
-        SignedTransaction issueTx = issue("albacore", "manilla");
-        LedgerTransaction issueLedgerTx = issueTx.toLedgerTransaction(a.getServices());
-        UniqueIdentifier linearId = issueLedgerTx.outputsOfType(CryptoFishy.class).get(0).getLinearId();
-        fish(linearId);
-        Party newOwner = b.getInfo().getLegalIdentities().get(0);
-        SignedTransaction transferTx = transfer(linearId, newOwner);
+        LedgerTransaction issueTx = issue(a, TYPE, LOCATION);
+        UniqueIdentifier linearId = issueTx.outputsOfType(CryptoFishy.class).get(0).getLinearId();
+        fish(a, linearId);
+        LedgerTransaction transferTx = transfer(a, linearId, partyB);
 
         assertEquals(1, transferTx.getInputs().size());
-        assertEquals(1, transferTx.getTx().getOutputs().size());
-        // TODO: More assertions.
+        assertEquals(1, transferTx.getOutputs().size());
+
+        List<CryptoFishy> inputFishies = transferTx.inputsOfType(CryptoFishy.class);
+        assertEquals(1, inputFishies.size());
+        List<CryptoFishy> outputFishies = transferTx.outputsOfType(CryptoFishy.class);
+        assertEquals(1, outputFishies.size());
+
+        CryptoFishy inputFishy = inputFishies.get(0);
+        CryptoFishy outputFishy = outputFishies.get(0);
+        CryptoFishy expectedInputFishy = new CryptoFishy(
+                Date.from(Instant.now()).getYear(),
+                partyA, TYPE, LOCATION, true, partyA,
+                inputFishy.getLinearId());
+        assertEquals(expectedInputFishy, inputFishy);
+        assertEquals(expectedInputFishy.transfer(partyB), outputFishy);
     }
 
-    private SignedTransaction issue(String type, String location) throws Exception {
+    private LedgerTransaction issue(StartedMockNode node, String type, String location) throws Exception {
         IssueCryptoFishyFlow flow = new IssueCryptoFishyFlow(type, location);
-        CordaFuture<SignedTransaction> future = a.startFlow(flow);
+        CordaFuture<SignedTransaction> future = node.startFlow(flow);
         network.runNetwork();
-        return future.get();
+        SignedTransaction stx = future.get();
+        return stx.toLedgerTransaction(node.getServices());
     }
 
-    private SignedTransaction fish(UniqueIdentifier linearId) throws Exception {
+    private LedgerTransaction fish(StartedMockNode node, UniqueIdentifier linearId) throws Exception {
         FishCryptoFishyFlow flow = new FishCryptoFishyFlow(linearId);
-        CordaFuture<SignedTransaction> future = a.startFlow(flow);
+        CordaFuture<SignedTransaction> future = node.startFlow(flow);
         network.runNetwork();
-        return future.get();
+        SignedTransaction stx = future.get();
+        return stx.toLedgerTransaction(node.getServices());
     }
 
-    private SignedTransaction transfer(UniqueIdentifier linearId, Party newOwner) throws Exception {
+    private LedgerTransaction transfer(StartedMockNode node, UniqueIdentifier linearId, Party newOwner) throws Exception {
         TransferCryptoFishyFlow flow = new TransferCryptoFishyFlow(linearId, newOwner);
-        CordaFuture<SignedTransaction> future = a.startFlow(flow);
+        CordaFuture<SignedTransaction> future = node.startFlow(flow);
         network.runNetwork();
-        return future.get();
+        SignedTransaction stx = future.get();
+        return stx.toLedgerTransaction(node.getServices());
     }
 }

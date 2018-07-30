@@ -1,12 +1,9 @@
 package com.oliveoyl;
 
 import co.paralleluniverse.fibers.Suspendable;
-import net.corda.core.contracts.Command;
-import net.corda.core.flows.FinalityFlow;
+import com.oliveoyl.CryptoFishyCommands.Issue;
 import net.corda.core.flows.FlowException;
 import net.corda.core.flows.FlowLogic;
-
-import com.oliveoyl.CryptoFishyCommands.Issue;
 import net.corda.core.identity.Party;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.TransactionBuilder;
@@ -26,21 +23,14 @@ public class IssueCryptoFishyFlow extends FlowLogic<SignedTransaction> {
     @Suspendable
     public SignedTransaction call() throws FlowException {
         Party notary = getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0);
-        Party regulatoryBody = getOurIdentity();
 
         int year = Date.from(Instant.now()).getYear();
-        CryptoFishy cryptoFishy = new CryptoFishy(year, regulatoryBody, type, location, false, regulatoryBody);
+        CryptoFishy cryptoFishy = new CryptoFishy(year, getOurIdentity(), type, location, false, getOurIdentity());
 
-        Command<Issue> issueCommand = new Command<>(new Issue(), regulatoryBody.getOwningKey());
+        TransactionBuilder builder = new TransactionBuilder(notary)
+                .addOutputState(cryptoFishy, CryptoFishyContract.ID)
+                .addCommand(new Issue(), getOurIdentity().getOwningKey());
 
-        TransactionBuilder builder = new TransactionBuilder(notary);
-        builder.addOutputState(cryptoFishy, "com.oliveoyl.CryptoFishyContract");
-        builder.addCommand(issueCommand);
-
-        builder.verify(getServiceHub());
-
-        SignedTransaction signedTransaction = getServiceHub().signInitialTransaction(builder);
-
-        return subFlow(new FinalityFlow(signedTransaction));
+        return subFlow(new VerifySignAndFinaliseFlow(builder));
     }
 }

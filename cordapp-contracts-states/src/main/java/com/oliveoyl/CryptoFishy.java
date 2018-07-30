@@ -6,8 +6,8 @@ import net.corda.core.contracts.UniqueIdentifier;
 import net.corda.core.identity.AbstractParty;
 import net.corda.core.identity.Party;
 import net.corda.core.serialization.ConstructorForDeserialization;
+import org.jetbrains.annotations.NotNull;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
@@ -90,16 +90,15 @@ public class CryptoFishy implements LinearState {
         CryptoFishy that = (CryptoFishy) o;
         return year == that.year &&
                 isFished == that.isFished &&
-                Objects.equals(owner, that.owner) &&
-                Objects.equals(type, that.type) &&
-                Objects.equals(location, that.location) &&
-                Objects.equals(regulatoryBody, that.regulatoryBody) &&
-                Objects.equals(linearId, that.linearId);
+                owner.equals(that.owner) &&
+                type.equals(that.type) &&
+                location.equals(that.location) &&
+                regulatoryBody.equals(that.regulatoryBody) &&
+                linearId.equals(that.linearId);
     }
 
     @Override
     public int hashCode() {
-
         return Objects.hash(year, owner, type, location, isFished, regulatoryBody, linearId);
     }
 }
