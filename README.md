@@ -72,7 +72,7 @@ This requires three flows:
 
 * IssueCryptoFishyFlow
 * FishCryptoFishyFlow
-* TradeFishedCryptoFishyFlow
+* TransferCryptoFishyFlow
 
 ## Extensions for V2
 

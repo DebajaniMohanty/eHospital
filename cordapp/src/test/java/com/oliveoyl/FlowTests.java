@@ -3,6 +3,7 @@ package com.oliveoyl;
 import com.google.common.collect.ImmutableList;
 import net.corda.core.concurrent.CordaFuture;
 import net.corda.core.contracts.UniqueIdentifier;
+import net.corda.core.identity.Party;
 import net.corda.core.transactions.LedgerTransaction;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.testing.node.MockNetwork;
@@ -57,6 +58,20 @@ public class FlowTests {
         // TODO: More assertions.
     }
 
+    @Test
+    public void transfer() throws Exception {
+        SignedTransaction issueTx = issue("albacore", "manilla");
+        LedgerTransaction issueLedgerTx = issueTx.toLedgerTransaction(a.getServices());
+        UniqueIdentifier linearId = issueLedgerTx.outputsOfType(CryptoFishy.class).get(0).getLinearId();
+        fish(linearId);
+        Party newOwner = b.getInfo().getLegalIdentities().get(0);
+        SignedTransaction transferTx = transfer(linearId, newOwner);
+
+        assertEquals(1, transferTx.getInputs().size());
+        assertEquals(1, transferTx.getTx().getOutputs().size());
+        // TODO: More assertions.
+    }
+
     private SignedTransaction issue(String type, String location) throws Exception {
         IssueCryptoFishyFlow flow = new IssueCryptoFishyFlow(type, location);
         CordaFuture<SignedTransaction> future = a.startFlow(flow);
@@ -66,6 +81,13 @@ public class FlowTests {
 
     private SignedTransaction fish(UniqueIdentifier linearId) throws Exception {
         FishCryptoFishyFlow flow = new FishCryptoFishyFlow(linearId);
+        CordaFuture<SignedTransaction> future = a.startFlow(flow);
+        network.runNetwork();
+        return future.get();
+    }
+
+    private SignedTransaction transfer(UniqueIdentifier linearId, Party newOwner) throws Exception {
+        TransferCryptoFishyFlow flow = new TransferCryptoFishyFlow(linearId, newOwner);
         CordaFuture<SignedTransaction> future = a.startFlow(flow);
         network.runNetwork();
         return future.get();

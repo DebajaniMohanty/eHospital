@@ -13,11 +13,11 @@ import net.corda.core.node.services.vault.QueryCriteria;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.TransactionBuilder;
 
-public class TradeCryptoFishyFlow extends FlowLogic<SignedTransaction> {
+public class TransferCryptoFishyFlow extends FlowLogic<SignedTransaction> {
     private final UniqueIdentifier linearId;
     private final Party newOwner;
 
-    public TradeCryptoFishyFlow(UniqueIdentifier linearId, Party newOwner) {
+    public TransferCryptoFishyFlow(UniqueIdentifier linearId, Party newOwner) {
         this.linearId = linearId;
         this.newOwner = newOwner;
     }
@@ -30,7 +30,7 @@ public class TradeCryptoFishyFlow extends FlowLogic<SignedTransaction> {
         CryptoFishy inputFishy = inputStateAndRef.getState().getData();
         CryptoFishy outputFishy = inputFishy.transfer(newOwner);
 
-        Command<CryptoFishyCommands.TransferFished> transferCommand = new Command<>(new CryptoFishyCommands.TransferFished(), getOurIdentity().getOwningKey());
+        Command<CryptoFishyCommands.Transfer> transferCommand = new Command<>(new CryptoFishyCommands.Transfer(), getOurIdentity().getOwningKey());
 
         TransactionBuilder builder = new TransactionBuilder(inputStateAndRef.getState().getNotary())
                 .addInputState(inputStateAndRef)
