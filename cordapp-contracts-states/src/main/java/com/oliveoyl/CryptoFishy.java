@@ -40,16 +40,12 @@ public class CryptoFishy implements LinearState {
         return ImmutableList.of(owner);
     }
 
-    public CryptoFishy trade(Party owner) {
-        return new CryptoFishy(year, owner, type, location, isFished);
-    }
-
     public CryptoFishy fish() {
         return new CryptoFishy(year, owner, type, location, true, linearId);
     }
 
-    public CryptoFishy throwBackIntoTheSea() {
-        return new CryptoFishy(year, owner, type, location, false);
+    public CryptoFishy transfer(Party newOwner) {
+        return new CryptoFishy(year, newOwner, type, location, isFished, linearId);
     }
 
     public Party getOwner() {
