@@ -13,11 +13,11 @@ import java.util.Objects;
 
 public class CryptoFishy implements LinearState {
     private final int year;
-    private final Party owner;
+    @NotNull private final Party owner;
     private final String type;
     private final String location;
     private final boolean isFished;
-    private final Party regulatoryBody;
+    @NotNull private final Party regulatoryBody;
     private final UniqueIdentifier linearId;
 
     public CryptoFishy(int year, Party owner, String type, String location, boolean isFished, Party regulatoryBody) {
