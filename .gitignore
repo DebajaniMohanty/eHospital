@@ -2,4 +2,6 @@
 .idea/
 olive-oyl.iml
 cordapp/build/
+out/
 cordapp/out/
+cordapp-contracts-states/out/
