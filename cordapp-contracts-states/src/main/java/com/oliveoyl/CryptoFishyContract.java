@@ -37,7 +37,6 @@ public class CryptoFishyContract implements Contract {
             require.using("The owner property must change in a CryptoFishyTransfer transaction.", !(in.getOwner().equals(out.getOwner())));
             require.using("There must only be one signers (the current owner) in a CryptoFishyTransfer transaction.", command.getSigners().size() == 1);
             final Party currentOwner = in.getOwner();
-            final Party newOwner = out.getOwner();
             require.using("The current owner and new owner must be signers in a CryptoFishyTransfer transaction.",
                     command.getSigners().containsAll(ImmutableList.of(currentOwner.getOwningKey())));
             require.using("The new owner must not be null in a CryptoFishyTransfer transaction.", out.getOwner() != null);
