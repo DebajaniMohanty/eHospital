@@ -29,7 +29,7 @@ public class IssueCryptoFishyFlow extends FlowLogic<SignedTransaction> {
         Party regulatoryBody = getOurIdentity();
 
         int year = Date.from(Instant.now()).getYear();
-        CryptoFishy cryptoFishy = new CryptoFishy(year, regulatoryBody, type, location, false);
+        CryptoFishy cryptoFishy = new CryptoFishy(year, regulatoryBody, type, location, false, regulatoryBody);
 
         Command<Issue> issueCommand = new Command<>(new Issue(), regulatoryBody.getOwningKey());
 

@@ -1,5 +1,6 @@
 package com.oliveoyl;
 
+import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.ImmutableList;
 import net.corda.core.contracts.Command;
 import net.corda.core.contracts.StateAndRef;
@@ -21,6 +22,7 @@ public class TradeCryptoFishyFlow extends FlowLogic<SignedTransaction> {
         this.newOwner = newOwner;
     }
 
+    @Suspendable
     public SignedTransaction call() throws FlowException {
         QueryCriteria queryCriteria = new QueryCriteria.LinearStateQueryCriteria(null, ImmutableList.of(linearId.getId()));
         StateAndRef<CryptoFishy> inputStateAndRef = getServiceHub().getVaultService().queryBy(CryptoFishy.class, queryCriteria).getStates().get(0);

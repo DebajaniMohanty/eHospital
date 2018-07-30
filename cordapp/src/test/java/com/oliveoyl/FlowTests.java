@@ -46,7 +46,7 @@ public class FlowTests {
     }
 
     @Test
-    public void transfer() throws Exception {
+    public void fish() throws Exception {
         SignedTransaction issueTx = issue("albacore", "manilla");
         LedgerTransaction issueLedgerTx = issueTx.toLedgerTransaction(a.getServices());
         UniqueIdentifier linearId = issueLedgerTx.outputsOfType(CryptoFishy.class).get(0).getLinearId();

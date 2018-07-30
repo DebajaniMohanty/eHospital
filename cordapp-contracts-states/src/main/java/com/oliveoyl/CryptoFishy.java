@@ -16,24 +16,27 @@ public class CryptoFishy implements LinearState {
     private final String type;
     private final String location;
     private final boolean isFished;
+    private final Party regulatoryBody;
     private final UniqueIdentifier linearId;
 
-    public CryptoFishy(int year, Party owner, String type, String location, boolean isFished) {
+    public CryptoFishy(int year, Party owner, String type, String location, boolean isFished, Party regulatoryBody) {
         this.year = year;
         this.owner = owner;
         this.type = type;
         this.location = location;
         this.isFished = isFished;
+        this.regulatoryBody = regulatoryBody;
         this.linearId = new UniqueIdentifier();
     }
 
     @ConstructorForDeserialization
-    public CryptoFishy(int year, Party owner, String type, String location, boolean isFished, UniqueIdentifier linearId) {
+    public CryptoFishy(int year, Party owner, String type, String location, boolean isFished, Party regulatoryBody, UniqueIdentifier linearId) {
         this.year = year;
         this.owner = owner;
         this.type = type;
         this.location = location;
         this.isFished = isFished;
+        this.regulatoryBody = regulatoryBody;
         this.linearId = linearId;
     }
 
@@ -43,11 +46,15 @@ public class CryptoFishy implements LinearState {
     }
 
     public CryptoFishy fish() {
-        return new CryptoFishy(year, owner, type, location, true, linearId);
+        return new CryptoFishy(year, owner, type, location, true, regulatoryBody, linearId);
     }
 
     public CryptoFishy transfer(Party newOwner) {
-        return new CryptoFishy(year, newOwner, type, location, isFished, linearId);
+        return new CryptoFishy(year, newOwner, type, location, isFished, regulatoryBody, linearId);
+    }
+
+    public int getYear() {
+        return year;
     }
 
     public Party getOwner() {
@@ -66,8 +73,8 @@ public class CryptoFishy implements LinearState {
         return isFished;
     }
 
-    public int getYear() {
-        return year;
+    public Party getRegulatoryBody() {
+        return regulatoryBody;
     }
 
     @NotNull
