@@ -115,7 +115,7 @@ public class FlowTests {
     }
 
     private LedgerTransaction issue(StartedMockNode node, String type, String location) throws Exception {
-        IssueCryptoFishyFlow flow = new IssueCryptoFishyFlow(type, location);
+        IssueCryptoFishyFlow flow = new IssueCryptoFishyFlow(partyA, type, location);
         CordaFuture<SignedTransaction> future = node.startFlow(flow);
         network.runNetwork();
         SignedTransaction stx = future.get();

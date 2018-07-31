@@ -15,8 +15,8 @@ public class CryptoFishyPlugin implements WebServerPluginRegistry {
 
     private final Map<String, String> staticServeDirs = ImmutableMap.of(
             "regulatoryBody", getClass().getClassLoader().getResource("regulatoryBodyWeb").toExternalForm(),
-            "fisherman1", getClass().getClassLoader().getResource("fisherman1Web").toExternalForm(),
-            "fisherman2", getClass().getClassLoader().getResource("fisherman2Web").toExternalForm(),
+            "fishermanOne", getClass().getClassLoader().getResource("fisherman1Web").toExternalForm(),
+            "fishermanTwo", getClass().getClassLoader().getResource("fisherman2Web").toExternalForm(),
             "buyer", getClass().getClassLoader().getResource("buyerWeb").toExternalForm()
     );
 

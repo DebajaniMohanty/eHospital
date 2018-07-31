@@ -18,7 +18,7 @@ public class NodeDriver {
     public static void main(String[] args) {
         final User user = new User("user1", "test", ImmutableSet.of("ALL"));
         driver(new DriverParameters().withStartNodesInProcess(true).withWaitForAllNodesToFinish(true), dsl -> {
-            List<String> names = ImmutableList.of("Regulatory Body", "Fisherman 1", "Fisherman 2", "Buyer");
+            List<String> names = ImmutableList.of("RegulatoryBody", "FishermanOne", "FishermanTwo", "Buyer");
 
             // We start the nodes in a for-loop to ensure they start in the same order and obtain the same webports
             // each time.
