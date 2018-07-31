@@ -127,6 +127,6 @@ overfishing:
 
 This requires three flows:
 
-* IssueCryptoFishyFlow
-* FishCryptoFishyFlow
-* TransferCryptoFishyFlow
+* `IssueCryptoFishyFlow`
+* `FishCryptoFishyFlow`
+* `TransferCryptoFishyFlow`
