@@ -18,6 +18,8 @@ Run the `NodeDriver` run configuration from IntelliJ. This starts four nodes:
 * `FishermanTwo`: http://localhost:10015/web/fishermanTwo
 * `Buyer`: http://localhost:10019/web/buyer
 
+The source files for the front-ends can be found under `cordapp/src/main/resources`.
+
 ## APIs
 
 * `GET me`
