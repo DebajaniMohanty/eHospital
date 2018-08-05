@@ -1,10 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+    <link>
     <meta charset="UTF-8">
-    <title>Template CorDapp</title>
+    <title>Buyer</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/custom.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0-rc.1/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.2.0/ui-bootstrap-tpls.min.js"></script>
+    <script src="js/angular-module.js"></script>
+    <script src="js/angular-base64-upload.min.js"></script>
 </head>
-<body>
-<div>Template CorDapp frontend.</div>
+<body ng-app="demoAppModule" ng-controller="DemoAppController as demoApp">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">{{demoApp.thisNode}}</a>
+                <button ng-click="demoApp.refresh()" type="button" class="btn btn-default navbar-btn"><span  class="glyphicon glyphicon-refresh"></span></button>
+            </div>
+        </div>
+    </nav>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <div ng-show="!demoApp.cryptofishies.length" class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">CryptoFishies</h3>
+                </div>
+                <div class="panel-body">There are no recorded CryptoFishies.</div>
+            </div>
+            <div ng-show="demoApp.cryptofishies.length" class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">CryptoFishies</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table text-center">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Expedition Year</th>
+                            <th class="text-center">Fish Type</th>
+                            <th class="text-center">Location</th>
+                            <th class="text-center">Fished</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="cryptofishy in demoApp.cryptofishies">
+                            <td class="vert-align">{{cryptofishy.year}}</td>
+                            <td class="vert-align">{{cryptofishy.type}}</td>
+                            <td class="vert-align">{{cryptofishy.location}}</td>
+                            <td ng-if="!cryptofishy.fished" class="vert-align">No</td>
+                            <td ng-if="cryptofishy.fished" class="vert-align">Yes</td>
+                            <td>
+                                <button ng-if="cryptofishy.md5" ng-click="demoApp.showCertificateInfo(cryptofishy.linearId.id)" type="button" class="btn btn-primary">Download Certificate PDF</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div ng-show="!demoApp.resultsCertificateList.length" class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Generated Certificates</h3>
+                </div>
+                <div class="panel-body">There are no recorded Certificates.</div>
+            </div>
+            <div ng-show="demoApp.resultsCertificateList.length" class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Generated Certificates</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table text-center">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Generation Date</th>
+                            <th class="text-center">Expedition Year</th>
+                            <th class="text-center">Fish Type</th>
+                            <th class="text-center">Location</th>
+                            <th class="text-center">Document Type</th>
+                            <th class="text-center">Hash</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="cryptoFishyCertificate in demoApp.resultsCertificateList">
+                            <td class="vert-align">{{cryptoFishyCertificate.generationDate}}</td>
+                            <td class="vert-align">{{cryptoFishyCertificate.year}}</td>
+                            <td class="vert-align">{{cryptoFishyCertificate.type}}</td>
+                            <td class="vert-align">{{cryptoFishyCertificate.location}}</td>
+                            <td class="vert-align">PDF</td>
+                            <td class="vert-align"><a style="cursor: pointer;" ng-click="demoApp.showCertificateInfo(cryptoFishyCertificate.cryptoFishyLinearId)">{{cryptoFishyCertificate.md5}}</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="validate-certificate">
+                <h3>Validate your certificate</h3>
+                <form name="form">
+                    <table width="70%" class="table-borderless">
+                        <tr>
+                            <td>
+                                <label class="btn btn-primary">Select Certificate File
+                                    <input type="file" ng-model="file" name="file" base-sixty-four-input onload="onLoad" maxsize="2000" accept=".pdf" hidden>
+                                </label>
+                            </td>
+                            <td>
+                                <span > <b ng-show="file">File name: </b>{{file.filename}}</span>
+                            </td>
+                            <td>
+                                <button type="button" ng-click="SendData(file)" class="btn btn-success" ng-show="file">Validate</button>
+                            </td>
+                        </tr>
+                    </table>
+                    <div id="table-message">
+                        <table width="65%" class="table-borderless">
+                            <tr>
+                                <td>
+                                    <div data-ng-show="fileErrors" class="alert alert-danger">
+                                        <strong>Error:</strong> {{fileValidationErrorMessage}}
+                                    </div>
+
+                                    <div data-ng-show="fileValidationKO" class="alert alert-danger">
+                                        <strong>Error!</strong> Your certificate <strong>is not valid!</strong>
+                                    </div>
+
+                                    <div data-ng-show="fileValidationOK" class="alert alert-success" >
+                                        <strong>Success!</strong> Your certificate <strong>is valid!</strong>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
 </body>
 </html>

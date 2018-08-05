@@ -1,0 +1,47 @@
+
+/* BOOTSTRAP OVERRIDE*/
+
+/** Header and footer **/
+.table-borderless th,
+.table-borderless tbody,
+.table-borderless tr,
+.table-borderless td {
+    border: 0;
+    padding: 0;
+}
+
+.table tbody>tr>td.vert-align{
+    vertical-align: middle;
+}
+
+td.bold{
+  font-weight: bold;
+  padding-left: 130px; !important
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/** Certificates **/
+#validate-certificate {
+    padding-bottom: 5px;
+}
+
+#validate-certificate h3 {
+    padding-bottom: 5px;
+}
+
+#table-message {
+    padding-top: 5px;
+}
+
+#find-certificate {
+    padding-top: 5px;
+}
+
+#find-certificate h3 {
+    padding-bottom: 5px;
+}
+
+

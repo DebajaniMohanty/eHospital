@@ -59,6 +59,8 @@ dependencies {
     // Specify your CorDapp's dependencies below, including dependent CorDapps.
     // We've defined Cash as a dependent CorDapp as an example.
     cordapp project(":cordapp-contracts-states")
+    cordapp "org.apache.pdfbox:pdfbox:2.0.8"
+    cordapp "commons-codec:commons-codec:1.11"
 }
 
 task integrationTest(type: Test, dependsOn: []) {

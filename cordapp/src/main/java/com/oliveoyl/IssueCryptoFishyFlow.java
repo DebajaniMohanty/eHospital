@@ -11,6 +11,7 @@ import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.TransactionBuilder;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 
 @InitiatingFlow
@@ -30,7 +31,8 @@ public class IssueCryptoFishyFlow extends FlowLogic<SignedTransaction> {
     public SignedTransaction call() throws FlowException {
         Party notary = getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0);
 
-        int year = Date.from(Instant.now()).getYear();
+        LocalDate date = LocalDate.now();
+        int year = date.getYear();
         CryptoFishy cryptoFishy = new CryptoFishy(year, owner, type, location, false, getOurIdentity());
 
         TransactionBuilder builder = new TransactionBuilder(notary)
