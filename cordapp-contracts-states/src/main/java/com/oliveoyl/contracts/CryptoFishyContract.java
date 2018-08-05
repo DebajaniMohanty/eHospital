@@ -1,19 +1,17 @@
-package com.oliveoyl;
+package com.oliveoyl.contracts;
 
 import com.google.common.collect.ImmutableList;
+import com.oliveoyl.states.CryptoFishy;
 import net.corda.core.contracts.CommandWithParties;
 import net.corda.core.contracts.Contract;
 import net.corda.core.identity.Party;
 import net.corda.core.transactions.LedgerTransaction;
 
-import java.security.PublicKey;
-import java.util.List;
-
 import static net.corda.core.contracts.ContractsDSL.requireSingleCommand;
 import static net.corda.core.contracts.ContractsDSL.requireThat;
 
 public class CryptoFishyContract implements Contract {
-    public static final String ID = "com.oliveoyl.CryptoFishyContract";
+    public static final String ID = "com.oliveoyl.contracts.CryptoFishyContract";
 
     public void verify(LedgerTransaction tx) throws IllegalArgumentException {
         isFishy(tx);

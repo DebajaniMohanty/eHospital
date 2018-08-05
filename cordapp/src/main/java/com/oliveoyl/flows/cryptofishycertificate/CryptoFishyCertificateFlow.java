@@ -1,8 +1,11 @@
-package com.oliveoyl;
+package com.oliveoyl.flows.cryptofishycertificate;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.oliveoyl.contracts.CryptoFishyCertificateCommands;
+import com.oliveoyl.contracts.CryptoFishyCertificateContract;
+import com.oliveoyl.states.CryptoFishyCertificate;
 import net.corda.core.contracts.Command;
 import net.corda.core.contracts.ContractState;
 import net.corda.core.contracts.UniqueIdentifier;

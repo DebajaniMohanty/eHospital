@@ -1,4 +1,4 @@
-package com.oliveoyl;
+package com.oliveoyl.states;
 
 import com.google.common.collect.ImmutableList;
 import com.oliveoyl.schema.CryptoFishyCertificateSchemaV1;

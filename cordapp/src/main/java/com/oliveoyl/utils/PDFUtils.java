@@ -1,7 +1,7 @@
 package com.oliveoyl.utils;
 
 //import com.everis.jpmorgancc.data.JPMCertificateInfo;
-import com.oliveoyl.CryptoFishy;
+import com.oliveoyl.states.CryptoFishy;
 import org.apache.pdfbox.multipdf.Overlay;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
@@ -128,7 +128,7 @@ public class PDFUtils {
             document = PDDocument.load(file);
             PDDocumentInformation insertedInfo = document.getDocumentInformation();
             certificateInfo.setRegulatorBody(insertedInfo.getCustomMetadataValue("RegulatorBody"));
-            certificateInfo.setYear(Integer.parseInt(insertedInfo.getCustomMetadataValue("Year")));
+            certificateInfo.setYear(insertedInfo.getCustomMetadataValue("Year"));
             certificateInfo.setType(insertedInfo.getCustomMetadataValue("Type"));
             certificateInfo.setLocation(insertedInfo.getCustomMetadataValue("Location"));
             document.close();

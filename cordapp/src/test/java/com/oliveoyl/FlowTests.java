@@ -1,6 +1,10 @@
 package com.oliveoyl;
 
 import com.google.common.collect.ImmutableList;
+import com.oliveoyl.flows.cryptofishy.FishCryptoFishyFlow;
+import com.oliveoyl.flows.cryptofishy.IssueCryptoFishyFlow;
+import com.oliveoyl.flows.cryptofishy.TransferCryptoFishyFlow;
+import com.oliveoyl.states.CryptoFishy;
 import net.corda.core.concurrent.CordaFuture;
 import net.corda.core.contracts.UniqueIdentifier;
 import net.corda.core.identity.Party;

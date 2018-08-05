@@ -1,9 +1,16 @@
-package com.oliveoyl;
+package com.oliveoyl.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.oliveoyl.flows.cryptofishy.FishCryptoFishyFlow;
+import com.oliveoyl.flows.cryptofishy.IssueCryptoFishyFlow;
+import com.oliveoyl.flows.cryptofishy.TransferCryptoFishyFlow;
+import com.oliveoyl.flows.cryptofishycertificate.AttachCertificateCryptoFishyFlow;
+import com.oliveoyl.flows.cryptofishycertificate.CryptoFishyCertificateFlow;
 import com.oliveoyl.schema.CryptoFishyCertificateSchemaV1;
+import com.oliveoyl.states.CryptoFishy;
+import com.oliveoyl.states.CryptoFishyCertificate;
 import com.oliveoyl.utils.Base64File;
 import com.oliveoyl.utils.CryptoFishyCertificateInfo;
 import com.oliveoyl.utils.MD5Utils;
@@ -501,7 +508,7 @@ public class CryptoFishyApi {
             }
 
             CriteriaExpression regulatorBodyCriteriaExpression = Builder.equal(regulatorBody, certificateInfo.getRegulatorBody());
-            CriteriaExpression yearCriteriaExpression = Builder.equal(year, certificateInfo.getYear());
+            CriteriaExpression yearCriteriaExpression = Builder.equal(year, Integer.parseInt(certificateInfo.getYear()));
             CriteriaExpression typeCriteriaExpression = Builder.equal(type, certificateInfo.getType());
             CriteriaExpression locationCriteriaExpression = Builder.equal(location, certificateInfo.getLocation());
 

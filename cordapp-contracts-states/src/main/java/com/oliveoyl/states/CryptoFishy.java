@@ -1,4 +1,4 @@
-package com.oliveoyl;
+package com.oliveoyl.states;
 
 import com.google.common.collect.ImmutableList;
 import net.corda.core.contracts.LinearState;

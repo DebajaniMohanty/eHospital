@@ -1,4 +1,4 @@
-package com.oliveoyl;
+package com.oliveoyl.contracts;
 
 import net.corda.core.contracts.CommandData;
 

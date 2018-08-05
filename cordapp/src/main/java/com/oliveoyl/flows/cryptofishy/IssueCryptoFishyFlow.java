@@ -1,7 +1,10 @@
-package com.oliveoyl;
+package com.oliveoyl.flows.cryptofishy;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.oliveoyl.CryptoFishyCommands.Issue;
+import com.oliveoyl.contracts.CryptoFishyCommands.Issue;
+import com.oliveoyl.contracts.CryptoFishyContract;
+import com.oliveoyl.flows.VerifySignAndFinaliseFlow;
+import com.oliveoyl.states.CryptoFishy;
 import net.corda.core.flows.FlowException;
 import net.corda.core.flows.FlowLogic;
 import net.corda.core.flows.InitiatingFlow;
@@ -10,9 +13,7 @@ import net.corda.core.identity.Party;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.TransactionBuilder;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Date;
 
 @InitiatingFlow
 @StartableByRPC

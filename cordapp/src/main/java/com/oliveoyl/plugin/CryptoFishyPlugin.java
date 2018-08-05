@@ -1,8 +1,9 @@
-package com.oliveoyl;
+package com.oliveoyl.plugin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.oliveoyl.api.CryptoFishyApi;
 import net.corda.core.messaging.CordaRPCOps;
 import net.corda.webserver.services.WebServerPluginRegistry;
 

@@ -3,7 +3,7 @@ package com.oliveoyl.utils;
 public class CryptoFishyCertificateInfo {
 
     private String regulatorBody;
-    private int year;
+    private String year;
     private String type;
     private String location;
     private String md5;
@@ -14,10 +14,8 @@ public class CryptoFishyCertificateInfo {
         return regulatorBody;
     }
     public void setRegulatorBody(String regulatorBody) { this.regulatorBody = regulatorBody; }
-    public int getYear() {
-        return year;
-    }
-    public void setYear(int year) { this.year = year; }
+    public String getYear() { return year; }
+    public void setYear(String year) { this.year = year; }
     public String getType() {
         return type;
     }

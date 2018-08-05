@@ -1,5 +1,6 @@
-package com.oliveoyl;
+package com.oliveoyl.contracts;
 
+import com.oliveoyl.states.CryptoFishyCertificate;
 import net.corda.core.contracts.CommandWithParties;
 import net.corda.core.contracts.Contract;
 import net.corda.core.identity.AbstractParty;
@@ -14,7 +15,7 @@ import static net.corda.core.contracts.ContractsDSL.requireThat;
 
 public class CryptoFishyCertificateContract implements Contract {
 
-    public static final String ID = "com.oliveoyl.CryptoFishyCertificateContract";
+    public static final String ID = "com.oliveoyl.contracts.CryptoFishyCertificateContract";
 
 
     @Override
