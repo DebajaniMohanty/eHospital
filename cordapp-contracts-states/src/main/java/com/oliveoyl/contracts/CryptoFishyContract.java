@@ -24,7 +24,7 @@ public class CryptoFishyContract implements Contract {
         if (commandType instanceof CryptoFishyCommands.Issue) verifyIssue(tx, command);
         else if (commandType instanceof CryptoFishyCommands.Fish) verifyFish(tx, command);
         else if (commandType instanceof CryptoFishyCommands.Transfer) verifyTransfer(tx, command);
-        else if (commandType instanceof CryptoFishyCommands.AttachMd5) verifyAttachMd5(tx, command);
+//        else if (commandType instanceof CryptoFishyCommands.AttachMd5) verifyAttachMd5(tx, command);
     }
 
     private void verifyTransfer(LedgerTransaction tx, CommandWithParties command) throws IllegalArgumentException {
@@ -84,24 +84,4 @@ public class CryptoFishyContract implements Contract {
             return null;
         });
     }
-
-    private void verifyAttachMd5(LedgerTransaction tx, CommandWithParties command) throws IllegalArgumentException  {
-        requireThat(require -> {
-            require.using("A CryptoFishyAttachMd5 transaction should only consume one input state.", tx.getInputs().size() == 1);
-            require.using("A CryptoFishyAttachMd5 transaction should only create one output state.", tx.getOutputs().size() == 1);
-
-            final CryptoFishy in = tx.inputsOfType(CryptoFishy.class).get(0);
-            final CryptoFishy out = tx.outputsOfType(CryptoFishy.class).get(0);
-            require.using("The md5 property not must be null in a CryptoFishyAttachMd5 transaction.", (out.getMd5() != null));
-            require.using("The timestamp property not must be 0 in a CryptoFishyAttachMd5 transaction.", (out.getTimestamp() != 0));
-
-            require.using("There must only be one signer (the current owner) in a CryptoFishyAttachMd5 transaction.", command.getSigners().size() == 1);
-            final Party owner = in.getOwner();
-            require.using("The current owner must be a signer in a CryptoFishyAttachMd5 transaction.",
-                    command.getSigners().containsAll(ImmutableList.of(owner.getOwningKey())));
-
-            return null;
-        });
-    }
-
 }

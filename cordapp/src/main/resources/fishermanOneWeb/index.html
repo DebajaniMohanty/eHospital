@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
-    <link>
-    <meta charset="UTF-8">
-    <title>Fisherman</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/custom.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0-rc.1/angular.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.2.0/ui-bootstrap-tpls.min.js"></script>
-    <script src="js/angular-module.js"></script>
+<link>
+<meta charset="UTF-8">
+<title>Fisherman</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="css/custom.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0-rc.1/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.2.0/ui-bootstrap-tpls.min.js"></script>
+<script src="js/angular-module.js"></script>
 </head>
 <body ng-app="demoAppModule" ng-controller="DemoAppController as demoApp">
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href="#">{{demoApp.thisNode}}</a>
-            <button ng-click="demoApp.getCryptoFishies()" type="button" class="btn btn-default navbar-btn"><span  class="glyphicon glyphicon-refresh"></span></button>
+            <button ng-click="demoApp.getCryptoFishies()" type="button" class="btn btn-default navbar-btn"><span
+                    class="glyphicon glyphicon-refresh"></span></button>
         </div>
     </div>
 </nav>
@@ -54,10 +55,18 @@
                         <td ng-if="!cryptofishy.fished" class="vert-align">No</td>
                         <td ng-if="cryptofishy.fished" class="vert-align">Yes</td>
                         <td>
-                            <button ng-if="!cryptofishy.fished" ng-click="demoApp.openFishModal(cryptofishy.linearId.id)" type="button" class="btn btn-primary">Fish</button>
-                            <button ng-if="!cryptofishy.fished" ng-click="demoApp.openTradeModal(cryptofishy.linearId.id)" type="button" class="btn btn-primary">Trade</button>
-                            <button ng-if="cryptofishy.fished" ng-click="demoApp.openTransferModal(cryptofishy.linearId.id)" type="button" class="btn btn-primary">Transfer</button>
-                            <button ng-if="cryptofishy.md5" ng-click="demoApp.showCertificateInfo(cryptofishy.linearId.id)" type="button" class="btn btn-primary">Download Certificate PDF</button>
+                            <button ng-if="!cryptofishy.fished"
+                                    ng-click="demoApp.openFishModal(cryptofishy.linearId.id)" type="button"
+                                    class="btn btn-primary">Fish
+                            </button>
+                            <button ng-if="!cryptofishy.fished"
+                                    ng-click="demoApp.openTradeModal(cryptofishy.linearId.id)" type="button"
+                                    class="btn btn-primary">Transfer Rights
+                            </button>
+                            <button ng-if="cryptofishy.fished"
+                                    ng-click="demoApp.openTransferModal(cryptofishy.linearId.id)" type="button"
+                                    class="btn btn-primary">Sell
+                            </button>
                         </td>
                     </tr>
                     </tbody>

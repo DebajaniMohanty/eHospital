@@ -65,7 +65,7 @@ public class FlowTests {
         CryptoFishy expectedFishy = new CryptoFishy(
                 Date.from(Instant.now()).getYear(),
                 partyA, TYPE, LOCATION, false, partyA,
-                null, 0, fishy.getLinearId());
+                0, fishy.getLinearId());
         assertEquals(expectedFishy, fishy);
     }
 
@@ -88,7 +88,7 @@ public class FlowTests {
         CryptoFishy expectedInputFishy = new CryptoFishy(
                 Date.from(Instant.now()).getYear(),
                 partyA, TYPE, LOCATION, false, partyA,
-                null, 0, inputFishy.getLinearId());
+                0, inputFishy.getLinearId());
         assertEquals(expectedInputFishy, inputFishy);
         assertEquals(expectedInputFishy.fish(), outputFishy);
     }
@@ -113,7 +113,7 @@ public class FlowTests {
         CryptoFishy expectedInputFishy = new CryptoFishy(
                 Date.from(Instant.now()).getYear(),
                 partyA, TYPE, LOCATION, true, partyA,
-                null, 0, inputFishy.getLinearId());
+                0, inputFishy.getLinearId());
         assertEquals(expectedInputFishy, inputFishy);
         assertEquals(expectedInputFishy.transfer(partyB), outputFishy);
     }

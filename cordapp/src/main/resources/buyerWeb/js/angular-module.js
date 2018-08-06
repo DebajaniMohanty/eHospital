@@ -16,7 +16,7 @@
 // VIA THE NODE'S RPC INTERFACE. IN THE COMING WEEKS WE'LL WRITE A TUTORIAL ON
 // HOW BEST TO DO THIS.
 
-const app = angular.module('demoAppModule', ['ui.bootstrap', 'naif.base64']);
+const app = angular.module('demoAppModule', ['ui.bootstrap']);
 
 // Fix for unhandled rejections bug.
 app.config(['$qProvider', function ($qProvider) {
@@ -24,67 +24,6 @@ app.config(['$qProvider', function ($qProvider) {
 }]);
 
 app.controller('DemoAppController', function($scope, $http, $window, $rootScope, $location, $uibModal) {
-
-    //FILEUPLOAD
-   $scope.onChange = function (e, fileList) {
-     //alert('this is on-change handler!');
-   };
-
-   $scope.onLoad = function (e, reader, file, fileList, fileOjects, fileObj) {
-
-   };
-
-   var uploadedCount = 0;
-
-   $scope.files = [];
-
-   $scope.fileValidationOK = false;
-   $scope.fileValidationKO = false;
-   $scope.fileErrors = false;
-
-   $scope.SendData = function (file) {
-
-        $scope.fileValidationOK = false;
-        $scope.fileValidationKO = false;
-        $scope.fileErrors = false;
-
-        if(file.filesize > 200000) {
-            $scope.fileErrors = true;
-            $scope.fileValidationErrorMessage = 'Max. file size 200KB';
-            return;
-        }
-
-        if( !file.filename.toLowerCase().includes(".pdf")) {
-            $scope.fileErrors = true;
-            $scope.fileValidationErrorMessage = 'File extension not allowed!! PDF file required.';
-            return;
-        }
-
-       // use $.param jQuery function to serialize data from JSON
-        var data = {
-            "base64file" : file.base64
-        };
-
-        var config = {
-            headers : {
-                'Content-Type': 'text/plain;'
-            }
-        }
-
-        $http.post(apiBaseURL + "validate-doc/", data, config)
-        .then(
-               function(response){
-                 $scope.fileValidationOK = true;
-               },
-               function(response){
-                 $scope.fileValidationKO = true;
-                 $scope.fileValidationErrorMessage = 'Validation KO';
-               }
-        );
-   };
-
-    //END FILEUPLOAD
-
     const demoApp = this;
 
     // We identify the node.
@@ -104,23 +43,8 @@ app.controller('DemoAppController', function($scope, $http, $window, $rootScope,
      //Getting the CryptoFishies
      demoApp.getCryptoFishies();
 
-     //Get the results stored in the DLT
-     demoApp.getCertificateList = () => $http.get(apiBaseURL + "certificates/")
-              .then((response) => demoApp.resultsCertificateList = Object.keys(response.data)
-              .map((key) => response.data[key].state.data));
-
-    //Get the CryptoFishyCertificates list
-    demoApp.getCertificateList();
-
-    // Download the CryptoFishy certificate
-    demoApp.showCertificateInfo = (id) => {
-            window.open(apiBaseURL + "download-doc-fisherman?id=" + id, "_self");
-    };
-
     demoApp.refresh = () => {
             demoApp.getCryptoFishies();
-            demoApp.getCertificateList();
     };
-
 });
 

@@ -22,25 +22,8 @@ td.bold{
   display: none !important;
 }
 
-/** Certificates **/
-#validate-certificate {
-    padding-bottom: 5px;
-}
-
-#validate-certificate h3 {
-    padding-bottom: 5px;
-}
-
 #table-message {
     padding-top: 5px;
-}
-
-#find-certificate {
-    padding-top: 5px;
-}
-
-#find-certificate h3 {
-    padding-bottom: 5px;
 }
 
 body { background: #FFD1D1 !important; }
