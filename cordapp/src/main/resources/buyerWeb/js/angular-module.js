@@ -46,5 +46,10 @@ app.controller('DemoAppController', function($scope, $http, $window, $rootScope,
     demoApp.refresh = () => {
             demoApp.getCryptoFishies();
     };
+
+    // Download the CryptoFishy certificate
+    demoApp.showCertificateInfo = (id) => {
+            window.open(apiBaseURL + "download-certificate?id=" + id, "_self");
+    };
 });
 

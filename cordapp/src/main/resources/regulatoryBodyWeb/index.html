@@ -58,7 +58,8 @@
                             <td ng-if="cryptofishy.fished" class="vert-align">Yes</td>
                             <td>
                                 <button ng-click="demoApp.openTransferModal(cryptofishy.linearId.id)" type="button" class="btn btn-primary">Issue to Fisherman</button>
-                                </td>
+                                <button ng-click="demoApp.showCertificateInfo(cryptofishy.linearId.id)" type="button" class="btn btn-primary">Download Certificate PDF</button>
+                            </td>
                         </tr>
                         </tbody>
                     </table>

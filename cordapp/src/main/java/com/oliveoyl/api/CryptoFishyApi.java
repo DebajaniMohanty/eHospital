@@ -1,10 +1,13 @@
 package com.oliveoyl.api;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.oliveoyl.flows.cryptofishy.FishCryptoFishyFlow;
 import com.oliveoyl.flows.cryptofishy.IssueCryptoFishyFlow;
 import com.oliveoyl.flows.cryptofishy.TransferCryptoFishyFlow;
 import com.oliveoyl.states.CryptoFishy;
+import com.oliveoyl.utils.MD5Utils;
+import com.oliveoyl.utils.PDFUtils;
 import net.corda.core.contracts.StateAndRef;
 import net.corda.core.contracts.UniqueIdentifier;
 import net.corda.core.identity.CordaX500Name;
@@ -25,13 +28,16 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.File;
 import java.lang.reflect.Field;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.CREATED;
+import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
 @Path("cryptofishy")
 public class CryptoFishyApi {
@@ -178,4 +184,56 @@ public class CryptoFishyApi {
             return Response.status(BAD_REQUEST).entity(msg).build();
         }
     }
+
+
+    @GET
+    @Path("download-certificate")
+    @Produces("application/pdf")
+    public  Response getDocument(@QueryParam("id") String idString) {
+
+        //CryptoFishy linearId
+        UniqueIdentifier cryptoFishy_linearId = UniqueIdentifier.Companion.fromString(idString);
+
+        //Query to search the CryptoFishy by linearId
+        QueryCriteria queryCriteria = new QueryCriteria.LinearStateQueryCriteria(null, ImmutableList.of(cryptoFishy_linearId.getId()));
+        StateAndRef<CryptoFishy> inputStateAndRef = rpcOps.vaultQueryByCriteria(queryCriteria, CryptoFishy.class).getStates().get(0);
+
+        //Get the CryptoFishy
+        CryptoFishy cryptoFishy = inputStateAndRef.getState().getData();
+        if(cryptoFishy == null){
+            return Response.status(INTERNAL_SERVER_ERROR).entity("ERROR on certificate generation.\n").build();
+        }
+
+        //Info for the document name
+        String type = cryptoFishy.getType().trim();
+        String location = cryptoFishy.getLocation().trim();
+        Long timestamp = System.currentTimeMillis();
+        Timestamp ts = new Timestamp(timestamp);
+        StringBuilder fileName = new StringBuilder();
+        fileName.append(timestamp)
+                .append("-")
+                .append(cryptoFishy.getYear())
+                .append("-")
+                .append(type)
+                .append("-")
+                .append(location)
+                .append(".pdf");
+
+        //Create the pdf document
+        PDFUtils.generatePDFCertificate(cryptoFishy, fileName.toString(), cryptoFishy.getOwner().getName().toString());
+
+        //Output the document to certificates/generated directory
+        File file = new File("certificates/generated/" + fileName.toString());
+
+        //Response with the pdf document
+        Response.ResponseBuilder response = Response.ok((Object) file);
+        response.header("Content-Disposition", "attachment; filename=\"" + cryptoFishy.getYear() + "-" + type + "-" + location + ".pdf\"");
+
+        //Hash
+        //String md5value = MD5Utils.getMD5("certificates/generated/" + fileName.toString());
+
+
+        return response.build();
+    }
+
 }

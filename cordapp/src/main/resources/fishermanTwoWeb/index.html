@@ -59,6 +59,7 @@
                             <button ng-if="!cryptofishy.fished" ng-click="demoApp.openFishModal(cryptofishy.linearId.id)" type="button" class="btn btn-primary">Fish</button>
                             <button ng-if="!cryptofishy.fished" ng-click="demoApp.openTradeModal(cryptofishy.linearId.id)" type="button" class="btn btn-primary">Transfer Rights</button>
                             <button ng-if="cryptofishy.fished" ng-click="demoApp.openTransferModal(cryptofishy.linearId.id)" type="button" class="btn btn-primary">Sell</button>
+                            <button ng-click="demoApp.showCertificateInfo(cryptofishy.linearId.id)" type="button" class="btn btn-primary">Download Certificate PDF</button>
                         </td>
                     </tr>
                     </tbody>
