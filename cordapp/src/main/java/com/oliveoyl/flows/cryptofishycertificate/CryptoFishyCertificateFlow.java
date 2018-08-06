@@ -17,8 +17,6 @@ import net.corda.core.utilities.ProgressTracker;
 
 import static net.corda.core.contracts.ContractsDSL.requireThat;
 
-
-
 public class CryptoFishyCertificateFlow {
     @InitiatingFlow
     @StartableByRPC

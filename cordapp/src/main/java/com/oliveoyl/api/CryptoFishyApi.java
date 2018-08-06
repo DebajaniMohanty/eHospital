@@ -346,7 +346,7 @@ public class CryptoFishyApi {
     @GET
     @Path("download-doc-fisherman")
     @Produces("application/pdf")
-    public Response downloadDocumentForFisherman(@QueryParam("id") String idString) throws NoSuchFieldException {
+    public Response downloadDocumentForFisherman(@QueryParam("id") String idString) {
 
         //CryptoFishyCertificate linearId
         UniqueIdentifier linearId = UniqueIdentifier.Companion.fromString(idString);
@@ -415,8 +415,6 @@ public class CryptoFishyApi {
             }
 
             String md5value = MD5Utils.getMD5(tmpFilePath);
-
-            CryptoFishyCertificate cryptoFishyCertificate = null;
 
             Field year = null;
             Field type = null;

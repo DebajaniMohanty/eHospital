@@ -10,7 +10,6 @@ import net.corda.testing.driver.NodeParameters;
 import net.corda.testing.node.User;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static net.corda.testing.driver.Driver.driver;
 

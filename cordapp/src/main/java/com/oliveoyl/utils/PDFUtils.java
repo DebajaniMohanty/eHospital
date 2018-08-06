@@ -40,12 +40,10 @@ public class PDFUtils {
 
             String description = "This certificate allow to fish " + cryptoFishy.getType() + " in " + cryptoFishy.getLocation()  + " .";
 
-            String regulatorBody = regulatoryBodyName;
-
             writeCenteredLine(contentStream, font, page, description, MARGIN_TOP_FIRST_FIELD, FONT_SIZE);
-            writeCenteredLine(contentStream, font, page, regulatorBody, MARGIN_TOP_SECOND_FIELD, FONT_SIZE);
+            writeCenteredLine(contentStream, font, page, regulatoryBodyName, MARGIN_TOP_SECOND_FIELD, FONT_SIZE);
 
-            document.setDocumentInformation(addDocumentInfo(cryptoFishy, regulatorBody));
+            document.setDocumentInformation(addDocumentInfo(cryptoFishy, regulatoryBodyName));
 
             // Make sure that the content stream is closed:
             contentStream.close();

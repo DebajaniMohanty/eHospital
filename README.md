@@ -41,35 +41,13 @@ The source files for the front-ends can be found under `cordapp/src/main/resourc
 
 ### Example usage
 
-// TODO: Update this. Usage has changed.
-
-* Regulator issues a CryptoFishy to FishermanOne:
-
-  `http://localhost:10007/api/cryptofishy/issue-cryptofishy?owner=FishermanOne&type=albacore&location=manilla`
-  
-* FishermanOne checks their CryptoFishies:
-
-  `http://localhost:10011/api/cryptofishy/cryptofishies`
-  
-* Using the `id` from the previous call, FishermanOne fishies a CryptoFishy:
-
-  `http://localhost:10011/api/cryptofishy/fish-cryptofishy?id=8c624b9e-e949-4bbd-bc44-12f647e78da5`
-  
-* FishermanOne checks their CryptoFishies. The CryptoFishy is now fished:
-
-  `http://localhost:10011/api/cryptofishy/cryptofishies`
-
-* Using the `id` from the previous call, FishermanOne transfers a CryptoFishy to Buyer:
-
-  `http://localhost:10011/api/cryptofishy/transfer-cryptofishy?id=8c624b9e-e949-4bbd-bc44-12f647e78da5&newOwner=Buyer`
-  
-* FishermanOne checks their CryptoFishies. They no longer have the CryptoFishy:
-
-  `http://localhost:10011/api/cryptofishy/cryptofishies`
-  
-* Buyer checks their CryptoFishies. They now have the CryptoFishy:
-  
-  `http://localhost:10019/api/cryptofishy/cryptofishies`
+* Regulatory body issues a new CryptoFishy
+* Regulatory body notifies the buyer about the new CryptoFishy
+    * Both the regulatory body and the buyer can now view the certificate
+* Regulatory body transfers the CryptoFishy to the first fisherman
+* First fisherman transfers the CryptoFishy to the second fisherman
+* Second fisherman fishes the CryptoFishy
+* Second fisherman transfers the CryptoFishy to the buyer
 
 ## Architecture
 
