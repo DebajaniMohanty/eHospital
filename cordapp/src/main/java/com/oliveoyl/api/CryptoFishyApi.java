@@ -65,7 +65,7 @@ public class CryptoFishyApi {
     }
 
     @GET
-    @Path("regulatory-body-name")
+    @Path("regulatory-body")
     @Produces(MediaType.APPLICATION_JSON)
     public Map<String, String> getRegulatorBodyName() throws Exception {
         List<NodeInfo> nodeInfoSnapshot = rpcOps.networkMapSnapshot();
@@ -82,7 +82,7 @@ public class CryptoFishyApi {
     }
 
     @GET
-    @Path("buyer-name")
+    @Path("buyer")
     @Produces(MediaType.APPLICATION_JSON)
     public Map<String, String> getBuyerName() throws Exception {
         List<NodeInfo> nodeInfoSnapshot = rpcOps.networkMapSnapshot();

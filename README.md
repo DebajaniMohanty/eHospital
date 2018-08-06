@@ -23,13 +23,25 @@ The source files for the front-ends can be found under `cordapp/src/main/resourc
 ## APIs
 
 * `GET me`
-* `GET peers`
+* `GET regulatory-body`
+* `GET buyer`
+* `GET fishermen`
+* `GET other-fishermen`
+* `GET buyers`
 * `GET cryptofishies`
+* `GET consumed-cryptofishies`
 * `GET issue-cryptofishy?owner=<INSERT>&type=<INSERT>&location=<INSERT>`
 * `GET fish-cryptofishy?id=<INSERT>`
 * `GET transfer-cryptofishy?id=<INSERT>&newOwner=<INSERT>`
+* `GET get-doc?id=<INSERT>&owner=<INSERT>&otherParty=<INSERT>`
+* `GET certificates`
+* `GET download-doc?id=<INSERT>`
+* `GET download-doc-fishermen?id=<INSERT>`
+* `GET validate-doc`
 
 ### Example usage
+
+// TODO: Update this. Usage has changed.
 
 * Regulator issues a CryptoFishy to FishermanOne:
 

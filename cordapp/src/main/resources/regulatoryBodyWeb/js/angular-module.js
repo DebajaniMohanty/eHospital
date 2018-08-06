@@ -36,12 +36,12 @@ app.controller('DemoAppController', function($http, $location, $uibModal) {
     });
 
     // This Node: When create a new CryptoFish, the node will be the RegulatorBody
-    $http.get(apiBaseURL + "regulatory-body-name").then((response) => {
+    $http.get(apiBaseURL + "regulatory-body").then((response) => {
         demoApp.regulatorBody = response.data.regulatorBody;
     });
 
     // Buyer: OtherParty when create a new CryptoFishCertificate
-    $http.get(apiBaseURL + "buyer-name").then((response) => {
+    $http.get(apiBaseURL + "buyer").then((response) => {
         demoApp.buyer = response.data.buyer;
     });
 
