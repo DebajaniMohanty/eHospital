@@ -56,7 +56,7 @@
                             <td ng-if="cryptofishy.fished" class="vert-align">Yes</td>
                             <td>
                                 <button ng-if="cryptofishy.md5" ng-click="demoApp.openTransferModal(cryptofishy.linearId.id)" type="button" class="btn btn-primary">Issue to Fisherman</button>
-                                <button ng-if="!cryptofishy.md5" ng-click="demoApp.getCertificate(cryptofishy.linearId.id)" type="button" class="btn btn-primary">Notify Buyer</button>
+                                <button ng-if="!cryptofishy.md5" ng-click="demoApp.getCertificate(cryptofishy.linearId.id)" type="button" class="btn btn-primary">Generate PDF Certificate</button>
                             </td>
                         </tr>
                         </tbody>

@@ -1,4 +1,3 @@
-
 /* BOOTSTRAP OVERRIDE*/
 
 /** Header and footer **/
@@ -44,4 +43,4 @@ td.bold{
     padding-bottom: 5px;
 }
 
-
+body { background: #FFD1D1 !important; }

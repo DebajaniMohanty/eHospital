@@ -114,7 +114,7 @@ app.controller('DemoAppController', function($scope, $http, $window, $rootScope,
 
     // Download the CryptoFishy certificate
     demoApp.showCertificateInfo = (id) => {
-            window.open(apiBaseURL + "download-doc?id=" + id, "_self");
+            window.open(apiBaseURL + "download-doc-fisherman?id=" + id, "_self");
     };
 
     demoApp.refresh = () => {

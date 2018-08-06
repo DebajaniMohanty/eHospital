@@ -266,9 +266,8 @@ public class CryptoFishyApi {
         String md5value = MD5Utils.getMD5("certificates/generated/" + fileName.toString());
 
         try {
-
             final SignedTransaction signedTxCertificate =
-                    rpcOps.startTrackedFlowDynamic(CryptoFishyCertificateFlow.Initiator.class, otherParty, cryptoFishy.getYear(),
+                    rpcOps.startTrackedFlowDynamic(CryptoFishyCertificateFlow.Initiator.class, owner, cryptoFishy.getYear(),
                                                    cryptoFishy.getType(), cryptoFishy.getLocation(), md5value, timestamp, ts.toString(), idString)
                             .getReturnValue()
                             .get();
@@ -293,8 +292,6 @@ public class CryptoFishyApi {
             logger.error(msg, ex);
             return Response.status(INTERNAL_SERVER_ERROR).entity("ERROR on certificate generation.\n").build();
         }
-
-        //return response.build();
     }
 
     @GET

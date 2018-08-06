@@ -121,7 +121,6 @@ app.controller('DemoAppController', function($http, $location, $uibModal) {
     };
 
     //Get the Certificate from CryptoFishy linearId
-//    demoApp.getCertificate = (id) => window.open(apiBaseURL + "get-doc?id=" + id + "&owner=" + demoApp.regulatorBody + "&otherParty=" + demoApp.buyer, "_self");
     demoApp.getCertificate = (id) => {
         const createIssueCertificateEndpoint = `${apiBaseURL}get-doc?id=${id}&owner=${demoApp.regulatorBody}&otherParty=${demoApp.buyer}`;
         $http.get(createIssueCertificateEndpoint).then(
