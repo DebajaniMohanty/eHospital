@@ -16,17 +16,19 @@ public class CryptoFishy implements LinearState {
     @NotNull private final Party owner;
     private final String type;
     private final String location;
+    private final Integer quantity;
     private final boolean isFished;
     private final long timestamp;
     @NotNull private final Party regulatoryBody;
 
     private final UniqueIdentifier linearId;
 
-    public CryptoFishy(int year, Party owner, String type, String location, boolean isFished, Party regulatoryBody) {
+    public CryptoFishy(int year, Party owner, String type, String location, Integer quantity, boolean isFished, Party regulatoryBody) {
         this.year = year;
         this.owner = owner;
         this.type = type;
         this.location = location;
+        this.quantity = quantity;
         this.isFished = isFished;
         this.regulatoryBody = regulatoryBody;
         this.timestamp = 0;
@@ -34,11 +36,12 @@ public class CryptoFishy implements LinearState {
     }
 
     @ConstructorForDeserialization
-    public CryptoFishy(int year, Party owner, String type, String location, boolean isFished, Party regulatoryBody, long timestamp, UniqueIdentifier linearId) {
+    public CryptoFishy(int year, Party owner, String type, String location, Integer quantity, boolean isFished, Party regulatoryBody, long timestamp, UniqueIdentifier linearId) {
         this.year = year;
         this.owner = owner;
         this.type = type;
         this.location = location;
+        this.quantity = quantity;
         this.isFished = isFished;
         this.regulatoryBody = regulatoryBody;
         this.timestamp = timestamp;
@@ -51,11 +54,11 @@ public class CryptoFishy implements LinearState {
     }
 
     public CryptoFishy fish() {
-        return new CryptoFishy(year, owner, type, location, true, regulatoryBody, timestamp, linearId);
+        return new CryptoFishy(year, owner, type, location, quantity, true, regulatoryBody, timestamp, linearId);
     }
 
     public CryptoFishy transfer(Party newOwner) {
-        return new CryptoFishy(year, newOwner, type, location, isFished, regulatoryBody, timestamp, linearId);
+        return new CryptoFishy(year, newOwner, type, location, quantity, isFished, regulatoryBody, timestamp, linearId);
     }
 
     public int getYear() {
@@ -69,6 +72,9 @@ public class CryptoFishy implements LinearState {
     }
     public String getLocation() {
         return location;
+    }
+    public Integer getQuantity() {
+        return quantity;
     }
     public boolean isFished() {
         return isFished;

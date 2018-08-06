@@ -43,6 +43,7 @@
                         <th class="text-center">Expedition Year</th>
                         <th class="text-center">Fish Type</th>
                         <th class="text-center">Location</th>
+                        <th class="text-center">Quantity</th>
                         <th class="text-center">Fished</th>
                         <th class="text-center">Actions</th>
                     </tr>
@@ -52,10 +53,11 @@
                         <td class="vert-align">{{cryptofishy.year}}</td>
                         <td class="vert-align">{{cryptofishy.type}}</td>
                         <td class="vert-align">{{cryptofishy.location}}</td>
+                        <td class="vert-align">{{cryptofishy.quantity}}</td>
                         <td ng-if="!cryptofishy.fished" class="vert-align">No</td>
                         <td ng-if="cryptofishy.fished" class="vert-align">Yes</td>
                         <td>
-                            <button type="button" class="btn btn-warning">Sell (  V2 only!  )</button>
+                            <button type="button" class="btn btn-warning">Sell (  Not implemented  )</button>
                         </td>
                     </tr>
                     </tbody>

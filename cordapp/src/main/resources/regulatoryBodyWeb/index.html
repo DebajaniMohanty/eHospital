@@ -43,6 +43,7 @@
                             <th class="text-center">Expedition Year</th>
                             <th class="text-center">Fish Type</th>
                             <th class="text-center">Location</th>
+                            <th class="text-center">Quantity</th>
                             <th class="text-center">Fished</th>
                             <th class="text-center">Actions</th>
                         </tr>
@@ -52,6 +53,7 @@
                             <td class="vert-align">{{cryptofishy.year}}</td>
                             <td class="vert-align">{{cryptofishy.type}}</td>
                             <td class="vert-align">{{cryptofishy.location}}</td>
+                            <td class="vert-align">{{cryptofishy.quantity}}</td>
                             <td ng-if="!cryptofishy.fished" class="vert-align">No</td>
                             <td ng-if="cryptofishy.fished" class="vert-align">Yes</td>
                             <td>
@@ -85,6 +87,10 @@
                     <label for="location" class="control-label">Location (String):</label>
                     <input type="text" ng-model="modalInstance.form.location" class="form-control" id="location">
                 </div>
+                <div class="form-group">
+                    <label for="quantity" class="control-label">Quantity (Integer):</label>
+                    <input type="text" ng-model="modalInstance.form.quantity" class="form-control" id="quantity">
+                </div>
                 <div ng-show="modalInstance.formError" class="form-group">
                     <div class="alert alert-danger" role="alert">
                         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -112,6 +118,10 @@
                 <div class="form-group">
                     <label for="location" class="control-label">Location (String):</label>
                     <input type="text" ng-model="modalInstance.form.location" class="form-control" id="location">
+                </div>
+                <div class="form-group">
+                    <label for="quantity" class="control-label">Quantity (Integer):</label>
+                    <input type="text" ng-model="modalInstance.form.quantity" class="form-control" id="quantity">
                 </div>
                 <div ng-show="modalInstance.formError" class="form-group">
                     <div class="alert alert-danger" role="alert">

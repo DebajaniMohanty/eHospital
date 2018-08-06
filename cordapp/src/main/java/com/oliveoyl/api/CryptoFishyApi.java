@@ -131,11 +131,11 @@ public class CryptoFishyApi {
 
     @GET
     @Path("issue-cryptofishy")
-    public Response issueCryptofishy(@QueryParam("owner") String ownerString, @QueryParam("type") String type, @QueryParam("location") String location) {
+    public Response issueCryptofishy(@QueryParam("owner") String ownerString, @QueryParam("type") String type, @QueryParam("location") String location, @QueryParam("quantity") Integer quantity) {
         Party owner = rpcOps.partiesFromName(ownerString, false).iterator().next();
         try {
 
-            final SignedTransaction signedTx = rpcOps.startFlowDynamic(IssueCryptoFishyFlow.class, owner, type, location).getReturnValue().get();
+            final SignedTransaction signedTx = rpcOps.startFlowDynamic(IssueCryptoFishyFlow.class, owner, type, location, quantity).getReturnValue().get();
             final String msg = String.format("Transaction id %s committed to ledger.\n", signedTx.getId());
             return Response.status(CREATED).entity(msg).build();
 

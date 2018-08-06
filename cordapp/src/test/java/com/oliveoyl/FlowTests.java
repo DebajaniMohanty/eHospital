@@ -32,6 +32,7 @@ public class FlowTests {
     private Party partyB;
     private String TYPE = "albacore";
     private String LOCATION = "manilla";
+    private Integer QUANTITY = 100;
 
     @Before
     public void setup() {
@@ -64,7 +65,7 @@ public class FlowTests {
         CryptoFishy fishy = fishies.get(0);
         CryptoFishy expectedFishy = new CryptoFishy(
                 Date.from(Instant.now()).getYear(),
-                partyA, TYPE, LOCATION, false, partyA,
+                partyA, TYPE, LOCATION, QUANTITY, false, partyA,
                 0, fishy.getLinearId());
         assertEquals(expectedFishy, fishy);
     }
@@ -87,7 +88,7 @@ public class FlowTests {
         CryptoFishy outputFishy = outputFishies.get(0);
         CryptoFishy expectedInputFishy = new CryptoFishy(
                 Date.from(Instant.now()).getYear(),
-                partyA, TYPE, LOCATION, false, partyA,
+                partyA, TYPE, LOCATION, QUANTITY, false, partyA,
                 0, inputFishy.getLinearId());
         assertEquals(expectedInputFishy, inputFishy);
         assertEquals(expectedInputFishy.fish(), outputFishy);
@@ -112,14 +113,14 @@ public class FlowTests {
         CryptoFishy outputFishy = outputFishies.get(0);
         CryptoFishy expectedInputFishy = new CryptoFishy(
                 Date.from(Instant.now()).getYear(),
-                partyA, TYPE, LOCATION, true, partyA,
+                partyA, TYPE, LOCATION, QUANTITY, true, partyA,
                 0, inputFishy.getLinearId());
         assertEquals(expectedInputFishy, inputFishy);
         assertEquals(expectedInputFishy.transfer(partyB), outputFishy);
     }
 
     private LedgerTransaction issue(StartedMockNode node, String type, String location) throws Exception {
-        IssueCryptoFishyFlow flow = new IssueCryptoFishyFlow(partyA, type, location);
+        IssueCryptoFishyFlow flow = new IssueCryptoFishyFlow(partyA, type, location, QUANTITY);
         CordaFuture<SignedTransaction> future = node.startFlow(flow);
         network.runNetwork();
         SignedTransaction stx = future.get();

@@ -21,11 +21,13 @@ public class IssueCryptoFishyFlow extends FlowLogic<SignedTransaction> {
     private final Party owner;
     private final String type;
     private final String location;
+    private final Integer quantity;
 
-    public IssueCryptoFishyFlow(Party owner, String type, String location) {
+    public IssueCryptoFishyFlow(Party owner, String type, String location, Integer quantity) {
         this.owner = owner;
         this.type = type;
         this.location = location;
+        this.quantity = quantity;
     }
 
     @Suspendable
@@ -34,7 +36,7 @@ public class IssueCryptoFishyFlow extends FlowLogic<SignedTransaction> {
 
         LocalDate date = LocalDate.now();
         int year = date.getYear();
-        CryptoFishy cryptoFishy = new CryptoFishy(year, owner, type, location, false, getOurIdentity());
+        CryptoFishy cryptoFishy = new CryptoFishy(year, owner, type, location, quantity, false, getOurIdentity());
 
         TransactionBuilder builder = new TransactionBuilder(notary)
                 .addOutputState(cryptoFishy, CryptoFishyContract.ID)

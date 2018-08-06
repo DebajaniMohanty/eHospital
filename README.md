@@ -30,7 +30,7 @@ The source files for the front-ends can be found under `cordapp/src/main/resourc
 * `GET buyers`
 * `GET cryptofishies`
 * `GET consumed-cryptofishies`
-* `GET issue-cryptofishy?owner=<INSERT>&type=<INSERT>&location=<INSERT>`
+* `GET issue-cryptofishy?owner=<INSERT>&type=<INSERT>&location=<INSERT>&quantity=<INSERT>`
 * `GET fish-cryptofishy?id=<INSERT>`
 * `GET transfer-cryptofishy?id=<INSERT>&newOwner=<INSERT>`
 

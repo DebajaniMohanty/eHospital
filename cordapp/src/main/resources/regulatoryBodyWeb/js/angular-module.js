@@ -141,9 +141,10 @@ app.controller('ModalInstanceCtrl', function ($http, $location, $uibModalInstanc
             const owner = modalInstance.form.fisherman;
             const type = modalInstance.form.type;
             const location = modalInstance.form.location;
+            const quantity = modalInstance.form.quantity;
 
             // Create endpoint, call to the Rest API and handle success / fail responses.
-            const createIssueEndpoint = `${apiBaseURL}issue-cryptofishy?owner=${owner}&type=${type}&location=${location}`;
+            const createIssueEndpoint = `${apiBaseURL}issue-cryptofishy?owner=${owner}&type=${type}&location=${location}&quantity=${quantity}`;
             $http.get(createIssueEndpoint).then(
                 (result) => {
                     modalInstance.displayMessage(result);
@@ -197,9 +198,10 @@ app.controller('CreateModalInstanceCtrl', function ($http, $location, $uibModalI
             const owner = demoApp.regulatorBody;
             const type = modalInstance.form.type;
             const location = modalInstance.form.location;
+            const quantity = modalInstance.form.quantity;
 
             // Create endpoint, call to the Rest API and handle success / fail responses.
-            const createIssueEndpoint = `${apiBaseURL}issue-cryptofishy?owner=${owner}&type=${type}&location=${location}`;
+            const createIssueEndpoint = `${apiBaseURL}issue-cryptofishy?owner=${owner}&type=${type}&location=${location}&quantity=${quantity}`;
             $http.get(createIssueEndpoint).then(
                 (result) => {
                     modalInstance.displayMessage(result);
