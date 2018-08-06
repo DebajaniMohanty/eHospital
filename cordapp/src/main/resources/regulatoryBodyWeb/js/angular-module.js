@@ -36,7 +36,7 @@ app.controller('DemoAppController', function($http, $location, $uibModal) {
     });
 
     // This Node: When create a new CryptoFish, the node will be the RegulatorBody
-    $http.get(apiBaseURL + "regulatorBody-name").then((response) => {
+    $http.get(apiBaseURL + "regulatory-body-name").then((response) => {
         demoApp.regulatorBody = response.data.regulatorBody;
     });
 
@@ -121,9 +121,9 @@ app.controller('DemoAppController', function($http, $location, $uibModal) {
     };
 
     //Get the Certificate from CryptoFishy linearId
-//    demoApp.getCertificate = (id) => window.open(apiBaseURL + "getDoc?id=" + id + "&owner=" + demoApp.regulatorBody + "&otherParty=" + demoApp.buyer, "_self");
+//    demoApp.getCertificate = (id) => window.open(apiBaseURL + "get-doc?id=" + id + "&owner=" + demoApp.regulatorBody + "&otherParty=" + demoApp.buyer, "_self");
     demoApp.getCertificate = (id) => {
-        const createIssueCertificateEndpoint = `${apiBaseURL}getDoc?id=${id}&owner=${demoApp.regulatorBody}&otherParty=${demoApp.buyer}`;
+        const createIssueCertificateEndpoint = `${apiBaseURL}get-doc?id=${id}&owner=${demoApp.regulatorBody}&otherParty=${demoApp.buyer}`;
         $http.get(createIssueCertificateEndpoint).then(
             (result) => {
                 demoApp.displayMessage(result);
@@ -147,7 +147,7 @@ app.controller('DemoAppController', function($http, $location, $uibModal) {
 
     // Download the CryptoFishy certificate
     demoApp.showCertificateInfo = (id) => {
-            window.open(apiBaseURL + "downloadDoc?id=" + id, "_self");
+            window.open(apiBaseURL + "download-doc?id=" + id, "_self");
     };
 
     demoApp.refresh = () => {

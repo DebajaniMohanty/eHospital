@@ -71,7 +71,7 @@ app.controller('DemoAppController', function($scope, $http, $window, $rootScope,
             }
         }
 
-        $http.post(apiBaseURL + "validateDoc/", data, config)
+        $http.post(apiBaseURL + "validate-doc/", data, config)
         .then(
                function(response){
                  $scope.fileValidationOK = true;
@@ -114,7 +114,7 @@ app.controller('DemoAppController', function($scope, $http, $window, $rootScope,
 
     // Download the CryptoFishy certificate
     demoApp.showCertificateInfo = (id) => {
-            window.open(apiBaseURL + "downloadDoc?id=" + id, "_self");
+            window.open(apiBaseURL + "download-doc?id=" + id, "_self");
     };
 
     demoApp.refresh = () => {

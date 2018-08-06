@@ -51,19 +51,11 @@ public class CryptoFishyApi {
 
     private final CordaRPCOps rpcOps;
     private final CordaX500Name myLegalName;
-    private final List<String> serviceNames = ImmutableList.of("Notary Service", "Network Map Service");
 
     public CryptoFishyApi(CordaRPCOps rpcOps) {
         this.rpcOps = rpcOps;
         this.myLegalName = rpcOps.nodeInfo().getLegalIdentities().get(0).getName();
     }
-
-//    @GET
-//    @Path("me")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public String myIdentity() {
-//        return rpcOps.nodeInfo().getLegalIdentities().get(0).getName().getOrganisation();
-//    }
 
     @GET
     @Path("me")
@@ -73,7 +65,7 @@ public class CryptoFishyApi {
     }
 
     @GET
-    @Path("regulatorBody-name")
+    @Path("regulatory-body-name")
     @Produces(MediaType.APPLICATION_JSON)
     public Map<String, String> getRegulatorBodyName() throws Exception {
         List<NodeInfo> nodeInfoSnapshot = rpcOps.networkMapSnapshot();
@@ -106,17 +98,6 @@ public class CryptoFishyApi {
         return ImmutableMap.of("buyer", lista.get(0));
     }
 
-//    @GET
-//    @Path("peers")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public List<String> getPeers() {
-//        List<NodeInfo> nodeInfoSnapshot = rpcOps.networkMapSnapshot();
-//        return nodeInfoSnapshot
-//                .stream()
-//                .map(node -> node.getLegalIdentities().get(0).getName().getOrganisation())
-//                .collect(toList());
-//    }
-
     @GET
     @Path("fishermen")
     @Produces(MediaType.APPLICATION_JSON)
@@ -130,7 +111,7 @@ public class CryptoFishyApi {
     }
 
     @GET
-    @Path("others-fishermen")
+    @Path("other-fishermen")
     @Produces(MediaType.APPLICATION_JSON)
     public List<String> getOtherFishers() {
         List<NodeInfo> nodeInfoSnapshot = rpcOps.networkMapSnapshot();
@@ -176,33 +157,6 @@ public class CryptoFishyApi {
         return rpcOps.vaultQueryByCriteria(isFishedCriteria, CryptoFishy.class).getStates();
     }
 
-
-    @GET
-    @Path("create-cryptofishy")
-    public Response createCryptofishy(@QueryParam("owner") String ownerString, @QueryParam("type") String type, @QueryParam("location") String location) {
-        Party owner = rpcOps.partiesFromName(ownerString, false).iterator().next();
-        try {
-
-            final SignedTransaction signedTx = rpcOps.startFlowDynamic(AttachCertificateCryptoFishyFlow.class, owner, type, location).getReturnValue().get();
-            final String msg = String.format("Transaction id %s committed to ledger.\n", signedTx.getId());
-            return Response.status(CREATED).entity(msg).build();
-
-        } catch (Throwable ex) {
-            final String msg = ex.getMessage();
-            logger.error(ex.getMessage(), ex);
-            return Response.status(BAD_REQUEST).entity(msg).build();
-        }
-    }
-
-//    @GET
-//    @Path("issue-cryptofishy")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public String issueCryptofishy(@QueryParam("owner") String ownerString, @QueryParam("type") String type, @QueryParam("location") String location) throws Exception {
-//        Party owner = rpcOps.partiesFromName(ownerString, false).iterator().next();
-//        rpcOps.startFlowDynamic(IssueCryptoFishyFlow.class, owner, type, location).getReturnValue().get();
-//        return "Success.";
-//    }
-
     @GET
     @Path("issue-cryptofishy")
     public Response issueCryptofishy(@QueryParam("owner") String ownerString, @QueryParam("type") String type, @QueryParam("location") String location) {
@@ -220,15 +174,6 @@ public class CryptoFishyApi {
         }
     }
 
-//    @GET
-//    @Path("fish-cryptofishy")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public String fishCryptofishy(@QueryParam("id") String idString) throws Exception {
-//        UniqueIdentifier id = UniqueIdentifier.Companion.fromString(idString);
-//        rpcOps.startFlowDynamic(FishCryptoFishyFlow.class, id).getReturnValue().get();
-//        return "Success.";
-//    }
-
     @GET
     @Path("fish-cryptofishy")
     public Response fishCryptofishy(@QueryParam("id") String idString) {
@@ -244,16 +189,6 @@ public class CryptoFishyApi {
             return Response.status(BAD_REQUEST).entity(msg).build();
         }
     }
-
-//    @GET
-//    @Path("transfer-cryptofishy")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public String transferCryptofishy(@QueryParam("id") String idString, @QueryParam("newOwner") String newOwnerString) throws Exception {
-//        UniqueIdentifier id = UniqueIdentifier.Companion.fromString(idString);
-//        Party newOwner = rpcOps.partiesFromName(newOwnerString, false).iterator().next();
-//        rpcOps.startFlowDynamic(TransferCryptoFishyFlow.class, id, newOwner).getReturnValue().get();
-//        return "Success.";
-//    }
 
     @GET
     @Path("transfer-cryptofishy")
@@ -272,9 +207,8 @@ public class CryptoFishyApi {
         }
     }
 
-
     @GET
-    @Path("getDoc")
+    @Path("get-doc")
     @Produces("application/pdf")
     public  Response getDocument(@QueryParam("id") String idString,
                                  @QueryParam("owner") String ownerString,
@@ -372,7 +306,7 @@ public class CryptoFishyApi {
     }
 
     @GET
-    @Path("downloadDoc")
+    @Path("download-doc")
     @Produces("application/pdf")
     public Response downloadDocument(@QueryParam("id") String idString) throws NoSuchFieldException {
 
@@ -410,7 +344,7 @@ public class CryptoFishyApi {
     }
 
     @GET
-    @Path("downloadDoc-fisherman")
+    @Path("download-doc-fisherman")
     @Produces("application/pdf")
     public Response downloadDocumentForFisherman(@QueryParam("id") String idString) throws NoSuchFieldException {
 
@@ -448,7 +382,7 @@ public class CryptoFishyApi {
     }
 
     @POST
-    @Path("validateDoc")
+    @Path("validate-doc")
     @Consumes(MediaType.TEXT_PLAIN)
     public Response validateDocument(String base64file) {
 

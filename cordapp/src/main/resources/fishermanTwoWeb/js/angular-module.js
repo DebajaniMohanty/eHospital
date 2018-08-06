@@ -38,7 +38,7 @@ app.controller('DemoAppController', function($http, $location, $uibModal) {
     });
 
     // Fishers to trade CryptoFishies
-    $http.get(apiBaseURL + "others-fishermen").then((response) => {
+    $http.get(apiBaseURL + "other-fishermen").then((response) => {
         fishermen = response.data;
     });
 
@@ -121,7 +121,7 @@ app.controller('DemoAppController', function($http, $location, $uibModal) {
 
     // Download the CryptoFishy certificate
     demoApp.showCertificateInfo = (id) => {
-            window.open(apiBaseURL + "downloadDoc-fisherman?id=" + id, "_self");
+            window.open(apiBaseURL + "download-doc-fisherman?id=" + id, "_self");
     };
 
 });
