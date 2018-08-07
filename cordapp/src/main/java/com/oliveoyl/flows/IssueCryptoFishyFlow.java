@@ -1,4 +1,4 @@
-package com.oliveoyl.flows.cryptofishy;
+package com.oliveoyl.flows;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.oliveoyl.contracts.CryptoFishyCommands.Issue;

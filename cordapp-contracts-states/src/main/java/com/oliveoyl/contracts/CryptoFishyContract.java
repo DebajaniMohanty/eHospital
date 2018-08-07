@@ -24,7 +24,6 @@ public class CryptoFishyContract implements Contract {
         if (commandType instanceof CryptoFishyCommands.Issue) verifyIssue(tx, command);
         else if (commandType instanceof CryptoFishyCommands.Fish) verifyFish(tx, command);
         else if (commandType instanceof CryptoFishyCommands.Transfer) verifyTransfer(tx, command);
-//        else if (commandType instanceof CryptoFishyCommands.AttachMd5) verifyAttachMd5(tx, command);
     }
 
     private void verifyTransfer(LedgerTransaction tx, CommandWithParties command) throws IllegalArgumentException {

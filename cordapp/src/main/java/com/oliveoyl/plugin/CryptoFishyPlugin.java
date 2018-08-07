@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableMap;
 import com.oliveoyl.api.CryptoFishyApi;
 import net.corda.core.messaging.CordaRPCOps;
 import net.corda.webserver.services.WebServerPluginRegistry;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class CryptoFishyPlugin implements WebServerPluginRegistry {
             "buyer", getClass().getClassLoader().getResource("buyerWeb").toExternalForm()
     );
 
-    @Override public List<Function<CordaRPCOps, ?>> getWebApis() { return webApis; }
-    @Override public Map<String, String> getStaticServeDirs() { return staticServeDirs; }
+    @Override @NotNull public List<Function<CordaRPCOps, ?>> getWebApis() { return webApis; }
+    @Override @NotNull public Map<String, String> getStaticServeDirs() { return staticServeDirs; }
     @Override public void customizeJSONSerialization(ObjectMapper om) { }
 }

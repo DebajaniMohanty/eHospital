@@ -13,13 +13,12 @@ import java.util.Objects;
 
 public class CryptoFishy implements LinearState {
     private final int year;
-    @NotNull private final Party owner;
+    private final Party owner;
     private final String type;
     private final String location;
     private final Integer quantity;
     private final boolean isFished;
-    private final long timestamp;
-    @NotNull private final Party regulatoryBody;
+    private final Party regulatoryBody;
 
     private final UniqueIdentifier linearId;
 
@@ -31,12 +30,11 @@ public class CryptoFishy implements LinearState {
         this.quantity = quantity;
         this.isFished = isFished;
         this.regulatoryBody = regulatoryBody;
-        this.timestamp = 0;
         this.linearId = new UniqueIdentifier();
     }
 
     @ConstructorForDeserialization
-    public CryptoFishy(int year, Party owner, String type, String location, Integer quantity, boolean isFished, Party regulatoryBody, long timestamp, UniqueIdentifier linearId) {
+    public CryptoFishy(int year, Party owner, String type, String location, Integer quantity, boolean isFished, Party regulatoryBody, UniqueIdentifier linearId) {
         this.year = year;
         this.owner = owner;
         this.type = type;
@@ -44,7 +42,6 @@ public class CryptoFishy implements LinearState {
         this.quantity = quantity;
         this.isFished = isFished;
         this.regulatoryBody = regulatoryBody;
-        this.timestamp = timestamp;
         this.linearId = linearId;
     }
 
@@ -54,11 +51,11 @@ public class CryptoFishy implements LinearState {
     }
 
     public CryptoFishy fish() {
-        return new CryptoFishy(year, owner, type, location, quantity, true, regulatoryBody, timestamp, linearId);
+        return new CryptoFishy(year, owner, type, location, quantity, true, regulatoryBody, linearId);
     }
 
     public CryptoFishy transfer(Party newOwner) {
-        return new CryptoFishy(year, newOwner, type, location, quantity, isFished, regulatoryBody, timestamp, linearId);
+        return new CryptoFishy(year, newOwner, type, location, quantity, isFished, regulatoryBody, linearId);
     }
 
     public int getYear() {
@@ -82,10 +79,6 @@ public class CryptoFishy implements LinearState {
     public Party getRegulatoryBody() {
         return regulatoryBody;
     }
-    public long getTimestamp() {
-        return timestamp;
-    }
-
 
     @NotNull
     public UniqueIdentifier getLinearId() {
@@ -103,12 +96,11 @@ public class CryptoFishy implements LinearState {
                 type.equals(that.type) &&
                 location.equals(that.location) &&
                 regulatoryBody.equals(that.regulatoryBody) &&
-                timestamp == that.timestamp &&
                 linearId.equals(that.linearId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(year, owner, type, location, isFished, regulatoryBody, timestamp, linearId);
+        return Objects.hash(year, owner, type, location, isFished, regulatoryBody, linearId);
     }
 }
