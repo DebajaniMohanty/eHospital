@@ -1,19 +1,11 @@
 package com.oliveoyl.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.oliveoyl.flows.cryptofishy.FishCryptoFishyFlow;
-import com.oliveoyl.flows.cryptofishy.IssueCryptoFishyFlow;
-import com.oliveoyl.flows.cryptofishy.TransferCryptoFishyFlow;
-import com.oliveoyl.flows.cryptofishycertificate.AttachCertificateCryptoFishyFlow;
-import com.oliveoyl.flows.cryptofishycertificate.CryptoFishyCertificateFlow;
-import com.oliveoyl.schema.CryptoFishyCertificateSchemaV1;
+import com.oliveoyl.flows.FishCryptoFishyFlow;
+import com.oliveoyl.flows.IssueCryptoFishyFlow;
+import com.oliveoyl.flows.TransferCryptoFishyFlow;
 import com.oliveoyl.states.CryptoFishy;
-import com.oliveoyl.states.CryptoFishyCertificate;
-import com.oliveoyl.utils.Base64File;
-import com.oliveoyl.utils.CryptoFishyCertificateInfo;
-import com.oliveoyl.utils.MD5Utils;
 import com.oliveoyl.utils.PDFUtils;
 import net.corda.core.contracts.StateAndRef;
 import net.corda.core.contracts.UniqueIdentifier;
@@ -26,18 +18,17 @@ import net.corda.core.node.services.vault.Builder;
 import net.corda.core.node.services.vault.CriteriaExpression;
 import net.corda.core.node.services.vault.QueryCriteria;
 import net.corda.core.transactions.SignedTransaction;
-import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -79,23 +70,6 @@ public class CryptoFishyApi {
         }
 
         return ImmutableMap.of("regulatorBody", lista.get(0));
-    }
-
-    @GET
-    @Path("buyer")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Map<String, String> getBuyerName() throws Exception {
-        List<NodeInfo> nodeInfoSnapshot = rpcOps.networkMapSnapshot();
-        List<String> lista =  nodeInfoSnapshot
-                .stream()
-                .map(node -> node.getLegalIdentities().get(0).getName().getOrganisation())
-                .filter(name -> name.contains("Buyer"))
-                .collect(toList());
-        if(lista.size() < 1) {
-            throw new Exception("Buyer not found");
-        }
-
-        return ImmutableMap.of("buyer", lista.get(0));
     }
 
     @GET
@@ -159,11 +133,11 @@ public class CryptoFishyApi {
 
     @GET
     @Path("issue-cryptofishy")
-    public Response issueCryptofishy(@QueryParam("owner") String ownerString, @QueryParam("type") String type, @QueryParam("location") String location) {
+    public Response issueCryptofishy(@QueryParam("owner") String ownerString, @QueryParam("type") String type, @QueryParam("location") String location, @QueryParam("quantity") Integer quantity) {
         Party owner = rpcOps.partiesFromName(ownerString, false).iterator().next();
         try {
 
-            final SignedTransaction signedTx = rpcOps.startFlowDynamic(IssueCryptoFishyFlow.class, owner, type, location).getReturnValue().get();
+            final SignedTransaction signedTx = rpcOps.startFlowDynamic(IssueCryptoFishyFlow.class, owner, type, location, quantity).getReturnValue().get();
             final String msg = String.format("Transaction id %s committed to ledger.\n", signedTx.getId());
             return Response.status(CREATED).entity(msg).build();
 
@@ -207,270 +181,42 @@ public class CryptoFishyApi {
         }
     }
 
-    @GET
-    @Path("get-doc")
-    @Produces("application/pdf")
-    public  Response getDocument(@QueryParam("id") String idString,
-                                 @QueryParam("owner") String ownerString,
-                                 @QueryParam("otherParty") String otherPartyString) {
 
+    @GET
+    @Path("download-certificate")
+    @Produces("application/pdf")
+    public  Response getDocument(@QueryParam("id") String idString) {
         //CryptoFishy linearId
         UniqueIdentifier cryptoFishy_linearId = UniqueIdentifier.Companion.fromString(idString);
 
-        //Getting the regulatoryBody node and Buyer nodes
-        Party otherParty = rpcOps.partiesFromName(otherPartyString, false).iterator().next();
-        Party owner = rpcOps.partiesFromName(ownerString, false).iterator().next();
-        if (owner == null) {
-            return Response.status(BAD_REQUEST).entity("Party named " + ownerString + "cannot be found.\n").build();
-        }
-        if (otherParty == null) {
-            return Response.status(BAD_REQUEST).entity("Party named " + otherPartyString + "cannot be found.\n").build();
-        }
-
         //Query to search the CryptoFishy by linearId
         QueryCriteria queryCriteria = new QueryCriteria.LinearStateQueryCriteria(null, ImmutableList.of(cryptoFishy_linearId.getId()));
-        StateAndRef<CryptoFishy> inputStateAndRef = rpcOps.vaultQueryByCriteria(queryCriteria, CryptoFishy.class).getStates().get(0);
+        List<StateAndRef<CryptoFishy>> inputStateAndRefs = rpcOps.vaultQueryByCriteria(queryCriteria, CryptoFishy.class).getStates();
 
-        //Get the CryptoFishy
-        CryptoFishy cryptoFishy = inputStateAndRef.getState().getData();
-        if(cryptoFishy == null){
+        if (inputStateAndRefs.size()!= 1) {
             return Response.status(INTERNAL_SERVER_ERROR).entity("ERROR on certificate generation.\n").build();
         }
+
+        //Get the CryptoFishy
+        CryptoFishy cryptoFishy = inputStateAndRefs.get(0).getState().getData();
 
         //Info for the document name
         String type = cryptoFishy.getType().trim();
         String location = cryptoFishy.getLocation().trim();
         Long timestamp = System.currentTimeMillis();
-        Timestamp ts = new Timestamp(timestamp);
-        StringBuilder fileName = new StringBuilder();
-        fileName.append(timestamp)
-                .append("-")
-                .append(cryptoFishy.getYear())
-                .append("-")
-                .append(type)
-                .append("-")
-                .append(location)
-                .append(".pdf");
+        String fileName = String.valueOf(timestamp) + "-" + cryptoFishy.getYear() + "-" + type + "-" + location + ".pdf";
 
         //Create the pdf document
-        PDFUtils.generatePDFCertificate(cryptoFishy, fileName.toString(), owner.getName().toString());
+        PDFUtils.generatePDFCertificate(cryptoFishy, fileName, cryptoFishy.getOwner().getName().toString());
 
         //Output the document to certificates/generated directory
-        File file = new File("certificates/generated/" + fileName.toString());
+        File file = new File("certificates/generated/" + fileName);
 
         //Response with the pdf document
-        Response.ResponseBuilder response = Response.ok((Object) file);
-        response.header("Content-Disposition", "attachment; filename=\"" + cryptoFishy.getYear() + "-" + type + "-" + location + ".pdf\"");
-
-        //Hash
-        String md5value = MD5Utils.getMD5("certificates/generated/" + fileName.toString());
-
-        try {
-
-            final SignedTransaction signedTxCertificate =
-                    rpcOps.startTrackedFlowDynamic(CryptoFishyCertificateFlow.Initiator.class, otherParty, cryptoFishy.getYear(),
-                                                   cryptoFishy.getType(), cryptoFishy.getLocation(), md5value, timestamp, ts.toString(), idString)
-                            .getReturnValue()
-                            .get();
-
-            if(signedTxCertificate == null) {
-                return Response.status(BAD_REQUEST).entity("ERROR on certificate generation.\n").build();
-            }
-
-            final SignedTransaction signedTxAttachMd5 =
-                        rpcOps.startFlowDynamic(AttachCertificateCryptoFishyFlow.class, cryptoFishy_linearId, md5value, timestamp).getReturnValue().get();
-
-            if(signedTxAttachMd5 == null) {
-                return Response.status(BAD_REQUEST).entity("ERROR on certificate generation.\n").build();
-            }
-            final String msg = String.format("Transaction id %s committed to ledger.\n", signedTxCertificate.getId());
-            logger.info(msg);
-
-            return Response.status(CREATED).entity(msg).build();
-
-        } catch (Throwable ex) {
-            final String msg = ex.getMessage();
-            logger.error(msg, ex);
-            return Response.status(INTERNAL_SERVER_ERROR).entity("ERROR on certificate generation.\n").build();
-        }
-
-        //return response.build();
-    }
-
-    @GET
-    @Path("certificates")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<StateAndRef<CryptoFishyCertificate>> getCertificates() {
-        return rpcOps.vaultQuery(CryptoFishyCertificate.class).getStates();
-
-    }
-
-    @GET
-    @Path("download-doc")
-    @Produces("application/pdf")
-    public Response downloadDocument(@QueryParam("id") String idString) throws NoSuchFieldException {
-
-        Field field = null;
-        field = CryptoFishyCertificateSchemaV1.PersistentCryptoFishyCertificate.class.getDeclaredField("cryptoFishyLinearId");
-        CriteriaExpression expresion = Builder.equal(field, idString);
-        QueryCriteria queryCriteria = new QueryCriteria.VaultCustomQueryCriteria(expresion);
-        StateAndRef<CryptoFishyCertificate> inputStateAndRef = rpcOps.vaultQueryByCriteria(queryCriteria, CryptoFishyCertificate.class).getStates().get(0);
-
-        //Get the CryptoFishy
-        CryptoFishyCertificate cryptoFishyCertificate = inputStateAndRef.getState().getData();
-        if(cryptoFishyCertificate == null){
-            return Response.status(INTERNAL_SERVER_ERROR).entity("ERROR on certificate generation.\n").build();
-        }
-
-
-        String type = cryptoFishyCertificate.getType().trim();
-        String location = cryptoFishyCertificate.getLocation().trim();
-        StringBuilder fileName = new StringBuilder();
-        fileName.append(cryptoFishyCertificate.getTimestamp())
-                .append("-")
-                .append(cryptoFishyCertificate.getYear())
-                .append("-")
-                .append(type)
-                .append("-")
-                .append(location)
-                .append(".pdf");
-
-        File file = new File("certificates/generated/" + fileName.toString());
-
-        Response.ResponseBuilder response = Response.ok((Object) file);
-        response.header("Content-Disposition", "attachment; filename=\"" + cryptoFishyCertificate.getYear() + "-" + type + "-" + location + ".pdf\"");
-
-        return response.build();
-    }
-
-    @GET
-    @Path("download-doc-fisherman")
-    @Produces("application/pdf")
-    public Response downloadDocumentForFisherman(@QueryParam("id") String idString) {
-
-        //CryptoFishyCertificate linearId
-        UniqueIdentifier linearId = UniqueIdentifier.Companion.fromString(idString);
-
-        //Query to search the CryptoFishyCertificate by linearId
-        QueryCriteria queryCriteria = new QueryCriteria.LinearStateQueryCriteria(null, ImmutableList.of(linearId.getId()));
-        StateAndRef<CryptoFishy> inputStateAndRef = rpcOps.vaultQueryByCriteria(queryCriteria, CryptoFishy.class).getStates().get(0);
-
-        //Get the CryptoFishy
-        CryptoFishy cryptoFishy = inputStateAndRef.getState().getData();
-        if(cryptoFishy == null){
-            return Response.status(INTERNAL_SERVER_ERROR).entity("ERROR on certificate generation.\n").build();
-        }
-
-        String type = cryptoFishy.getType().trim();
-        String location = cryptoFishy.getLocation().trim();
-        StringBuilder fileName = new StringBuilder();
-        fileName.append(cryptoFishy.getTimestamp())
-                .append("-")
-                .append(cryptoFishy.getYear())
-                .append("-")
-                .append(type)
-                .append("-")
-                .append(location)
-                .append(".pdf");
-
-        File file = new File("certificates/generated/" + fileName.toString());
-
-        Response.ResponseBuilder response = Response.ok((Object) file);
+        Response.ResponseBuilder response = Response.ok(file);
         response.header("Content-Disposition", "attachment; filename=\"" + cryptoFishy.getYear() + "-" + type + "-" + location + ".pdf\"");
 
         return response.build();
-    }
-
-    @POST
-    @Path("validate-doc")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public Response validateDocument(String base64file) {
-
-        byte[] decodedBytes = new byte[0];
-        File tmpFile = null;
-        try {
-
-            //create ObjectMapper instance
-            ObjectMapper objectMapper = new ObjectMapper();
-
-            //convert json string to object
-            Base64File file = objectMapper.readValue(base64file, Base64File.class);
-            decodedBytes = Base64.decodeBase64(file.getBase64file());
-
-            Long timestamp = System.currentTimeMillis();
-            String tmpFilePath = "certificates/tmp/" + timestamp.toString() + ".pdf";
-            try (FileOutputStream fileOuputStream = new FileOutputStream(tmpFilePath)) {
-                fileOuputStream.write(decodedBytes);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            tmpFile = new File(tmpFilePath);
-
-            CryptoFishyCertificateInfo certificateInfo = PDFUtils.getDocumentInfo(tmpFile);
-
-            if(certificateInfo.equals(null)) {
-                System.out.println("ERROR - Null Document MetaInf");
-                tmpFile.delete();
-                return Response.status(INTERNAL_SERVER_ERROR).entity("ERROR on certificate validation.\n").build();
-            }
-
-            String md5value = MD5Utils.getMD5(tmpFilePath);
-
-            Field year = null;
-            Field type = null;
-            Field location = null;
-            Field regulatorBody = null;
-
-            try {
-
-                regulatorBody = CryptoFishyCertificateSchemaV1.PersistentCryptoFishyCertificate.class.getDeclaredField("regulatorBody");
-                year = CryptoFishyCertificateSchemaV1.PersistentCryptoFishyCertificate.class.getDeclaredField("year");
-                type = CryptoFishyCertificateSchemaV1.PersistentCryptoFishyCertificate.class.getDeclaredField("type");
-                location = CryptoFishyCertificateSchemaV1.PersistentCryptoFishyCertificate.class.getDeclaredField("location");
-
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-                tmpFile.delete();
-                return Response.status(INTERNAL_SERVER_ERROR).entity("ERROR on certificate validation.\n").build();
-            }
-
-            if(regulatorBody.equals(null) || year.equals(null) || type.equals(null) || location.equals(null)){
-                tmpFile.delete();
-                return Response.status(INTERNAL_SERVER_ERROR).entity("ERROR on certificate generation.\n").build();
-            }
-
-            CriteriaExpression regulatorBodyCriteriaExpression = Builder.equal(regulatorBody, certificateInfo.getRegulatorBody());
-            CriteriaExpression yearCriteriaExpression = Builder.equal(year, Integer.parseInt(certificateInfo.getYear()));
-            CriteriaExpression typeCriteriaExpression = Builder.equal(type, certificateInfo.getType());
-            CriteriaExpression locationCriteriaExpression = Builder.equal(location, certificateInfo.getLocation());
-
-            QueryCriteria regulatorBodyCriteria = new QueryCriteria.VaultCustomQueryCriteria(regulatorBodyCriteriaExpression);
-            QueryCriteria yearCriteria = new QueryCriteria.VaultCustomQueryCriteria(yearCriteriaExpression);
-            QueryCriteria typeCriteria = new QueryCriteria.VaultCustomQueryCriteria(typeCriteriaExpression);
-            QueryCriteria locationCriteria = new QueryCriteria.VaultCustomQueryCriteria(locationCriteriaExpression);
-
-            QueryCriteria criteria = regulatorBodyCriteria.and(yearCriteria).and(typeCriteria).and(locationCriteria);
-
-            List<StateAndRef<CryptoFishyCertificate>> stateList = rpcOps.vaultQueryByCriteria(criteria, CryptoFishyCertificate.class).getStates();
-
-            for (StateAndRef<CryptoFishyCertificate> element : stateList) {
-                if(element.getState().getData().getMd5().compareTo(md5value) == 0) {
-                    System.out.print("File exists in the ledger");
-                    tmpFile.delete();
-                    return Response.status(OK).entity("Successfully certificate validation.\n").build();
-                }
-            }
-
-            tmpFile.delete();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            tmpFile.delete();
-            return Response.status(INTERNAL_SERVER_ERROR).entity("ERROR on certificate validation.\n").build();
-        }
-
-        return Response.status(INTERNAL_SERVER_ERROR).entity("Document not valid\n").build();
-
     }
 
 }

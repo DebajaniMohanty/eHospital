@@ -40,11 +40,6 @@ app.controller('DemoAppController', function($http, $location, $uibModal) {
         demoApp.regulatorBody = response.data.regulatorBody;
     });
 
-    // Buyer: OtherParty when create a new CryptoFishCertificate
-    $http.get(apiBaseURL + "buyer").then((response) => {
-        demoApp.buyer = response.data.buyer;
-    });
-
     // fishermen to issue CryptoFishies
     $http.get(apiBaseURL + "fishermen").then((response) => {
         fishermen = response.data;
@@ -120,41 +115,15 @@ app.controller('DemoAppController', function($http, $location, $uibModal) {
         modalInstanceTwo.result.then(() => {}, () => {});
     };
 
-    //Get the Certificate from CryptoFishy linearId
-//    demoApp.getCertificate = (id) => window.open(apiBaseURL + "get-doc?id=" + id + "&owner=" + demoApp.regulatorBody + "&otherParty=" + demoApp.buyer, "_self");
-    demoApp.getCertificate = (id) => {
-        const createIssueCertificateEndpoint = `${apiBaseURL}get-doc?id=${id}&owner=${demoApp.regulatorBody}&otherParty=${demoApp.buyer}`;
-        $http.get(createIssueCertificateEndpoint).then(
-            (result) => {
-                demoApp.displayMessage(result);
-                demoApp.getCertificateList();
-                demoApp.getCryptoFishies();
-            },
-            (result) => {
-                demoApp.displayMessage(result);
-            }
-        );
+    demoApp.refresh = () => {
+            demoApp.getCryptoFishies();
     };
 
-
-    //Get the results stored in the DLT
-    demoApp.getCertificateList = () => $http.get(apiBaseURL + "certificates/")
-            .then((response) => demoApp.resultsCertificateList = Object.keys(response.data)
-                        .map((key) => response.data[key].state.data));
-
-    //Get the CryptoFishyCertificates list
-    demoApp.getCertificateList();
 
     // Download the CryptoFishy certificate
     demoApp.showCertificateInfo = (id) => {
-            window.open(apiBaseURL + "download-doc?id=" + id, "_self");
+            window.open(apiBaseURL + "download-certificate?id=" + id, "_self");
     };
-
-    demoApp.refresh = () => {
-            demoApp.getCryptoFishies();
-            demoApp.getCertificateList();
-    };
-
 
 });
 
@@ -177,9 +146,10 @@ app.controller('ModalInstanceCtrl', function ($http, $location, $uibModalInstanc
             const owner = modalInstance.form.fisherman;
             const type = modalInstance.form.type;
             const location = modalInstance.form.location;
+            const quantity = modalInstance.form.quantity;
 
             // Create endpoint, call to the Rest API and handle success / fail responses.
-            const createIssueEndpoint = `${apiBaseURL}issue-cryptofishy?owner=${owner}&type=${type}&location=${location}`;
+            const createIssueEndpoint = `${apiBaseURL}issue-cryptofishy?owner=${owner}&type=${type}&location=${location}&quantity=${quantity}`;
             $http.get(createIssueEndpoint).then(
                 (result) => {
                     modalInstance.displayMessage(result);
@@ -233,9 +203,10 @@ app.controller('CreateModalInstanceCtrl', function ($http, $location, $uibModalI
             const owner = demoApp.regulatorBody;
             const type = modalInstance.form.type;
             const location = modalInstance.form.location;
+            const quantity = modalInstance.form.quantity;
 
             // Create endpoint, call to the Rest API and handle success / fail responses.
-            const createIssueEndpoint = `${apiBaseURL}issue-cryptofishy?owner=${owner}&type=${type}&location=${location}`;
+            const createIssueEndpoint = `${apiBaseURL}issue-cryptofishy?owner=${owner}&type=${type}&location=${location}&quantity=${quantity}`;
             $http.get(createIssueEndpoint).then(
                 (result) => {
                     modalInstance.displayMessage(result);

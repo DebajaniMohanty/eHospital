@@ -1,4 +1,4 @@
-package com.oliveoyl.flows.cryptofishy;
+package com.oliveoyl.flows;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.ImmutableList;
@@ -12,20 +12,17 @@ import net.corda.core.flows.FlowException;
 import net.corda.core.flows.FlowLogic;
 import net.corda.core.flows.InitiatingFlow;
 import net.corda.core.flows.StartableByRPC;
-import net.corda.core.identity.Party;
 import net.corda.core.node.services.vault.QueryCriteria;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.TransactionBuilder;
 
 @InitiatingFlow
 @StartableByRPC
-public class TransferCryptoFishyFlow extends FlowLogic<SignedTransaction> {
+public class FishCryptoFishyFlow extends FlowLogic<SignedTransaction> {
     private final UniqueIdentifier linearId;
-    private final Party newOwner;
 
-    public TransferCryptoFishyFlow(UniqueIdentifier linearId, Party newOwner) {
+    public FishCryptoFishyFlow(UniqueIdentifier linearId) {
         this.linearId = linearId;
-        this.newOwner = newOwner;
     }
 
     @Suspendable
@@ -33,12 +30,12 @@ public class TransferCryptoFishyFlow extends FlowLogic<SignedTransaction> {
         QueryCriteria queryCriteria = new QueryCriteria.LinearStateQueryCriteria(null, ImmutableList.of(linearId.getId()));
         StateAndRef<CryptoFishy> inputStateAndRef = getServiceHub().getVaultService().queryBy(CryptoFishy.class, queryCriteria).getStates().get(0);
 
-        CryptoFishy outputFishy = inputStateAndRef.getState().getData().transfer(newOwner);
+        CryptoFishy outputFishy = inputStateAndRef.getState().getData().fish();
 
         TransactionBuilder builder = new TransactionBuilder(inputStateAndRef.getState().getNotary())
                 .addInputState(inputStateAndRef)
                 .addOutputState(outputFishy, CryptoFishyContract.ID)
-                .addCommand(new CryptoFishyCommands.Transfer(), getOurIdentity().getOwningKey());
+                .addCommand(new CryptoFishyCommands.Fish(), getOurIdentity().getOwningKey());
 
         return subFlow(new VerifySignAndFinaliseFlow(builder));
     }

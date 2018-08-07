@@ -1,9 +1,9 @@
 package com.oliveoyl;
 
 import com.google.common.collect.ImmutableList;
-import com.oliveoyl.flows.cryptofishy.FishCryptoFishyFlow;
-import com.oliveoyl.flows.cryptofishy.IssueCryptoFishyFlow;
-import com.oliveoyl.flows.cryptofishy.TransferCryptoFishyFlow;
+import com.oliveoyl.flows.FishCryptoFishyFlow;
+import com.oliveoyl.flows.IssueCryptoFishyFlow;
+import com.oliveoyl.flows.TransferCryptoFishyFlow;
 import com.oliveoyl.states.CryptoFishy;
 import net.corda.core.concurrent.CordaFuture;
 import net.corda.core.contracts.UniqueIdentifier;
@@ -18,8 +18,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.time.Instant;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -30,8 +29,9 @@ public class FlowTests {
     private StartedMockNode b;
     private Party partyA;
     private Party partyB;
-    private String TYPE = "albacore";
-    private String LOCATION = "manilla";
+    private final String TYPE = "albacore";
+    private final String LOCATION = "manilla";
+    private final Integer QUANTITY = 100;
 
     @Before
     public void setup() {
@@ -63,9 +63,9 @@ public class FlowTests {
 
         CryptoFishy fishy = fishies.get(0);
         CryptoFishy expectedFishy = new CryptoFishy(
-                Date.from(Instant.now()).getYear(),
-                partyA, TYPE, LOCATION, false, partyA,
-                null, 0, fishy.getLinearId());
+                Calendar.getInstance().get(Calendar.YEAR),
+                partyA, TYPE, LOCATION, QUANTITY, false, partyA,
+                fishy.getLinearId());
         assertEquals(expectedFishy, fishy);
     }
 
@@ -86,9 +86,9 @@ public class FlowTests {
         CryptoFishy inputFishy = inputFishies.get(0);
         CryptoFishy outputFishy = outputFishies.get(0);
         CryptoFishy expectedInputFishy = new CryptoFishy(
-                Date.from(Instant.now()).getYear(),
-                partyA, TYPE, LOCATION, false, partyA,
-                null, 0, inputFishy.getLinearId());
+                Calendar.getInstance().get(Calendar.YEAR),
+                partyA, TYPE, LOCATION, QUANTITY, false, partyA,
+                inputFishy.getLinearId());
         assertEquals(expectedInputFishy, inputFishy);
         assertEquals(expectedInputFishy.fish(), outputFishy);
     }
@@ -111,15 +111,15 @@ public class FlowTests {
         CryptoFishy inputFishy = inputFishies.get(0);
         CryptoFishy outputFishy = outputFishies.get(0);
         CryptoFishy expectedInputFishy = new CryptoFishy(
-                Date.from(Instant.now()).getYear(),
-                partyA, TYPE, LOCATION, true, partyA,
-                null, 0, inputFishy.getLinearId());
+                Calendar.getInstance().get(Calendar.YEAR),
+                partyA, TYPE, LOCATION, QUANTITY, true, partyA,
+                inputFishy.getLinearId());
         assertEquals(expectedInputFishy, inputFishy);
         assertEquals(expectedInputFishy.transfer(partyB), outputFishy);
     }
 
     private LedgerTransaction issue(StartedMockNode node, String type, String location) throws Exception {
-        IssueCryptoFishyFlow flow = new IssueCryptoFishyFlow(partyA, type, location);
+        IssueCryptoFishyFlow flow = new IssueCryptoFishyFlow(partyA, type, location, QUANTITY);
         CordaFuture<SignedTransaction> future = node.startFlow(flow);
         network.runNetwork();
         SignedTransaction stx = future.get();

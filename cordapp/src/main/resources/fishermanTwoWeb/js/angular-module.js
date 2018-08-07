@@ -118,11 +118,11 @@ app.controller('DemoAppController', function($http, $location, $uibModal) {
     //Getting the CryptoFishies
     demoApp.getCryptoFishies();
 
-
     // Download the CryptoFishy certificate
     demoApp.showCertificateInfo = (id) => {
-            window.open(apiBaseURL + "download-doc-fisherman?id=" + id, "_self");
+            window.open(apiBaseURL + "download-certificate?id=" + id, "_self");
     };
+
 
 });
 
