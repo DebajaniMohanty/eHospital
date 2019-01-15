@@ -12,6 +12,7 @@ buildscript {
     }
 
     dependencies {
+        classpath fileTree(dir: 'lib/dependencies', include: '*.jar')
         classpath "net.corda.plugins:cordapp:$corda_gradle_plugins_version"
         classpath "net.corda.plugins:cordformation:$corda_gradle_plugins_version"
         classpath "net.corda.plugins:quasar-utils:$corda_gradle_plugins_version"
@@ -102,7 +103,7 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         ]
     }
     node {
-        name "O=RegulatoryBody,L=London,C=GB"
+        name "O=HospitalA,L=London,C=GB"
         p2pPort 10003
         rpcSettings {
             address("localhost:10004")
@@ -116,7 +117,7 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         rpcUsers = [[ user: "user1", "password": "test", "permissions": ["ALL"]]]
     }
     node {
-        name "O=FishermanOne,L=London,C=GB"
+        name "O=HospitalB,L=London,C=GB"
         p2pPort 10007
         rpcSettings {
             address("localhost:10008")
@@ -129,38 +130,10 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         ]
         rpcUsers = [[ user: "user1", "password": "test", "permissions": ["ALL"]]]
     }
-    node {
-        name "O=FishermanTwo,L=London,C=GB"
-        p2pPort 10011
-        rpcSettings {
-            address("localhost:10012")
-            adminAddress("localhost:10013")
-        }
-        webPort 10014
-        cordapps = [
-                "$project.group:cordapp-contracts-states:$project.version",
-                "$project.group:cordapp:$project.version"
-        ]
-        rpcUsers = [[ user: "user1", "password": "test", "permissions": ["ALL"]]]
-    }
-    node {
-        name "O=Buyer,L=London,C=GB"
-        p2pPort 10015
-        rpcSettings {
-            address("localhost:10016")
-            adminAddress("localhost:10017")
-        }
-        webPort 10018
-        cordapps = [
-                "$project.group:cordapp-contracts-states:$project.version",
-                "$project.group:cordapp:$project.version"
-        ]
-        rpcUsers = [[ user: "user1", "password": "test", "permissions": ["ALL"]]]
-    }
 }
 
 task runTemplateClient(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
-    main = 'com.oliveoyl.TemplateClient'
+    main = 'com.eAuction.TemplateClient'
     args 'localhost:10006'
 }
